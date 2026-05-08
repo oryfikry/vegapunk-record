@@ -1,8 +1,10 @@
 import type { CallToolResult } from "@modelcontextprotocol/sdk/types.js";
 import { z } from "zod/v4";
-import type { ActivityLog, KnowledgeItem, VegapunkDatabase } from "../../db";
+import type { ChromaGateway } from "../../chroma";
+import type { VegapunkDatabase } from "../../db";
+import { search, type SearchResult, type SearchResponse } from "../../search";
 
-const collections = ["activity_logs", "core_knowledge"] as const;
+const collections = ["activity_logs", "core_knowledge", "ephemeral_memory"] as const;
 
 export const queryRecordsInputSchema = {
   query: z.string().trim().min(1),
@@ -27,7 +29,7 @@ export const queryRecordsOutputSchema = {
 
 export type QueryRecordsInput = {
   query: string;
-  collection?: "activity_logs" | "core_knowledge" | undefined;
+  collection?: (typeof collections)[number] | undefined;
   limit?: number | undefined;
 };
 
@@ -35,72 +37,82 @@ type QueryRecord = z.infer<typeof queryResultSchema>;
 
 type QueryRecordsStructuredOutput = {
   ok: true;
-  degraded: true;
+  degraded: boolean;
   results: QueryRecord[];
 };
 
-function parseMetadata(value: string): Record<string, unknown> {
-  try {
-    const parsed: unknown = JSON.parse(value);
-    return typeof parsed === "object" && parsed !== null && !Array.isArray(parsed) ? parsed as Record<string, unknown> : {};
-  } catch {
-    return {};
+function searchResultToRecord(result: SearchResult): QueryRecord {
+  if (result.source_table === "activity_logs") {
+    const type = typeof result.metadata.type === "string" ? result.metadata.type : "activity";
+    const source = typeof result.metadata.agent_id === "string" ? result.metadata.agent_id : "system";
+
+    return {
+      id: result.sqlite_id,
+      collection: "activity_logs",
+      title: `${type} from ${source}`,
+      content: result.document,
+      timestamp: typeof result.metadata.timestamp === "string" ? result.metadata.timestamp : "",
+      metadata: result.metadata,
+    };
   }
-}
 
-function activityMatches(activity: ActivityLog, normalizedQuery: string): boolean {
-  return [activity.message, activity.type, activity.source, activity.agent_id ?? "", activity.task_id ?? ""]
-    .some((value) => value.toLowerCase().includes(normalizedQuery));
-}
-
-function knowledgeMatches(item: KnowledgeItem, normalizedQuery: string): boolean {
-  return [item.title, item.content, item.collection]
-    .some((value) => value.toLowerCase().includes(normalizedQuery));
-}
-
-function activityToResult(activity: ActivityLog): QueryRecord {
   return {
-    id: activity.id,
-    collection: "activity_logs",
-    title: `${activity.type} from ${activity.agent_id ?? "system"}`,
-    content: activity.message,
-    timestamp: activity.timestamp,
-    metadata: parseMetadata(activity.metadata_json),
+    id: result.sqlite_id,
+    collection: result.collection === "ephemeral_memory" ? "ephemeral_memory" : "core_knowledge",
+    title: typeof result.metadata.title === "string" ? result.metadata.title : result.sqlite_id,
+    content: result.document,
+    timestamp: typeof result.metadata.updated_at === "string" ? result.metadata.updated_at : "",
+    metadata: result.metadata,
   };
 }
 
-function knowledgeToResult(item: KnowledgeItem): QueryRecord {
-  return {
-    id: item.id,
-    collection: "core_knowledge",
-    title: item.title,
-    content: item.content,
-    timestamp: item.updated_at,
-    metadata: parseMetadata(item.metadata_json),
-  };
+function matchesRequestedCollection(result: SearchResult, collection: QueryRecordsInput["collection"]): boolean {
+  if (!collection) {
+    return true;
+  }
+
+  if (collection === "activity_logs") {
+    return result.source_table === "activity_logs";
+  }
+
+  return result.source_table === "knowledge_items" && result.collection === collection;
 }
 
-export async function queryRecordsTool(db: VegapunkDatabase, input: QueryRecordsInput): Promise<CallToolResult> {
+export type QueryRecordsToolOptions = {
+  chromaClient?: ChromaGateway;
+};
+
+async function querySearch(db: VegapunkDatabase, input: QueryRecordsInput, limit: number, options: QueryRecordsToolOptions): Promise<SearchResponse> {
+  const searchLimit = Math.max(limit * 3, limit);
+
+  if (options.chromaClient) {
+    return search(db, input.query, { chromaClient: options.chromaClient, limit: searchLimit });
+  }
+
+  const unavailableChroma: ChromaGateway = {
+    async heartbeat() {
+      return false;
+    },
+    async getOrCreateCollection() {
+      throw new Error("Chroma client was not provided to query_records");
+    },
+  };
+
+  return search(db, input.query, { chromaClient: unavailableChroma, limit: searchLimit });
+}
+
+export async function queryRecordsTool(db: VegapunkDatabase, input: QueryRecordsInput, options: QueryRecordsToolOptions = {}): Promise<CallToolResult> {
   const limit = input.limit ?? 20;
-  const normalizedQuery = input.query.trim().toLowerCase();
-  const results: QueryRecord[] = [];
-
-  if (input.collection === undefined || input.collection === "activity_logs") {
-    results.push(...db.activities.list(500)
-      .filter((activity) => activityMatches(activity, normalizedQuery))
-      .map(activityToResult));
-  }
-
-  if (input.collection === undefined || input.collection === "core_knowledge") {
-    results.push(...db.knowledge.list()
-      .filter((item) => knowledgeMatches(item, normalizedQuery))
-      .map(knowledgeToResult));
-  }
+  const response = await querySearch(db, input, limit, options);
+  const results = response.results
+    .filter((result) => matchesRequestedCollection(result, input.collection))
+    .slice(0, limit)
+    .map(searchResultToRecord);
 
   const payload: QueryRecordsStructuredOutput = {
     ok: true,
-    degraded: true,
-    results: results.slice(0, limit),
+    degraded: response.degraded,
+    results,
   };
 
   return {

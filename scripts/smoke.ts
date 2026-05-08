@@ -104,8 +104,8 @@ async function callMcpTools(taskId: string, smokeAgentId: string, searchTerm: st
       name: "sync_to_records",
       arguments: {
         agent_id: smokeAgentId,
-        type: "message",
         content: `MCP sync smoke ${searchTerm}`,
+        collection: "activity_logs",
         metadata: { smoke: true, task: 12 },
       },
     });

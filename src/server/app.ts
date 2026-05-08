@@ -7,7 +7,7 @@ import { defaultConfig } from "../config";
 import type { VegapunkDatabase } from "../db";
 import { createMcpRoutes } from "../mcp";
 import { createErrorHandler } from "./error-handler";
-import { ActivityStream, createActivityRoutes, createActivityStreamRoutes, createAgentsRoutes, createKnowledgeRoutes, createTasksRoutes } from "./routes";
+import { ActivityStream, createActivityRoutes, createActivityStreamRoutes, createAgentsRoutes, createConfigRoutes, createKnowledgeRoutes, createTasksRoutes } from "./routes";
 
 const dashboardHtml = readFileSync(new URL("../../public/index.html", import.meta.url), "utf8");
 
@@ -28,14 +28,11 @@ export function createApp({ db, config = defaultConfig, chromaClient }: CreateAp
     .use(createTasksRoutes(db))
     .use(createActivityRoutes(db, activityStream))
     .use(createActivityStreamRoutes(activityStream))
+    .use(createConfigRoutes(db, config))
     .use(createKnowledgeRoutes(db, chromaClient ? { chromaClient } : {}))
-    .use(createMcpRoutes(db))
+    .use(createMcpRoutes(db, chromaClient ? { chromaClient } : {}))
     .onError(createErrorHandler(config.nodeEnv))
     .get("/health", () => ({ ok: true, service: "stella" as const }))
-    .get("/api/config", () => ({
-      service: "stella" as const,
-      llmProvider: config.llmProvider,
-    }))
     .get("/", ({ set }) => {
       set.headers["content-type"] = "text/html; charset=utf-8";
 

@@ -1,4 +1,5 @@
 import type { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
+import type { ChromaGateway } from "../../chroma";
 import type { VegapunkDatabase } from "../../db";
 import { queryRecordsInputSchema, queryRecordsOutputSchema, queryRecordsTool } from "./query-records";
 import { syncToRecordsInputSchema, syncToRecordsOutputSchema, syncToRecordsTool } from "./sync-to-records";
@@ -9,7 +10,11 @@ export type { QueryRecordsInput } from "./query-records";
 export type { SyncToRecordsInput } from "./sync-to-records";
 export type { UpdateTaskStatusInput } from "./update-task-status";
 
-export function registerMcpTools(server: McpServer, db: VegapunkDatabase): void {
+export type RegisterMcpToolsOptions = {
+  chromaClient?: ChromaGateway;
+};
+
+export function registerMcpTools(server: McpServer, db: VegapunkDatabase, options: RegisterMcpToolsOptions = {}): void {
   server.registerTool("sync_to_records", {
     title: "Sync to Records",
     description: "Persist agent content as a SQLite activity log record.",
@@ -19,11 +24,11 @@ export function registerMcpTools(server: McpServer, db: VegapunkDatabase): void 
 
   server.registerTool("query_records", {
     title: "Query Records",
-    description: "Search SQLite activity logs and core knowledge records. Chroma is not required and is reported as degraded.",
+    description: "Search activity logs, core knowledge, and ephemeral memory with Chroma when available and SQLite fallback otherwise.",
     inputSchema: queryRecordsInputSchema,
     outputSchema: queryRecordsOutputSchema,
     annotations: { readOnlyHint: true },
-  }, async (input) => queryRecordsTool(db, input));
+  }, async (input) => queryRecordsTool(db, input, options.chromaClient ? { chromaClient: options.chromaClient } : {}));
 
   server.registerTool("update_task_status", {
     title: "Update Task Status",

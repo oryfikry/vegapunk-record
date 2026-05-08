@@ -80,3 +80,10 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Added standalone degraded smoke via `scripts/smoke-degraded.ts` and `bun run smoke:degraded`; it verifies ingestion without Chroma, search `degraded: true`, deterministic mock LLM, and controlled missing OpenRouter key errors.
 - Replaced placeholder README with local setup, env vars, commands, architecture, degraded modes, and v1 non-goals. No git commit was created.
 - Verification passed: LSP diagnostics on modified TypeScript files had 0 diagnostics, `bun run typecheck` exited 0, `bun test` reported 57 pass/0 fail/225 assertions, `SMOKE_START_SERVER=1 bun run smoke` exited 0, `bun run smoke:degraded` exited 0, and `docker compose config` exited 0. Evidence: `.sisyphus/evidence/task-12-full-smoke.json` and `.sisyphus/evidence/task-12-degraded.json`.
+
+## 2026-05-08 - MCP plan contract compliance fixes
+- `sync_to_records` now uses `{ agent_id, content, collection, task_id?, metadata? }`; it always writes an activity log and creates a knowledge item plus pending embedding job for `core_knowledge` and `ephemeral_memory` collections.
+- `query_records` accepts `ephemeral_memory`; MCP registration passes the app `chromaClient` when available, while direct/no-client calls force the existing SQLite fallback so `degraded: true` only represents unavailable Chroma.
+- `update_task_status` now supports optional `agent_id` and optional `message`; when `message` is present it logs a `task_update` activity from the agent or `system`.
+- Config routes own both GET and PATCH under `/api/config`; PATCH only updates existing rows with `is_secret = 0`, preserving each row's type and returning 403 for secret keys.
+- Verification passed: `bun test` (61 pass) and `bun run typecheck` (exit 0).

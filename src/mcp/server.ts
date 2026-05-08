@@ -1,6 +1,7 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { WebStandardStreamableHTTPServerTransport } from "@modelcontextprotocol/sdk/server/webStandardStreamableHttp.js";
 import { Elysia } from "elysia";
+import type { ChromaGateway } from "../chroma";
 import type { VegapunkDatabase } from "../db";
 import { registerMcpTools } from "./tools";
 
@@ -40,13 +41,17 @@ export function isLocalMcpRequest(request: Request): boolean {
   return isAllowedLocalUrl(request.headers.get("origin"));
 }
 
-export function createMcpServer(db: VegapunkDatabase): McpServer {
+export type McpServerOptions = {
+  chromaClient?: ChromaGateway;
+};
+
+export function createMcpServer(db: VegapunkDatabase, options: McpServerOptions = {}): McpServer {
   const server = new McpServer({ name: "vegapunk-record", version: "0.1.0" });
-  registerMcpTools(server, db);
+  registerMcpTools(server, db, options);
   return server;
 }
 
-export function createMcpRoutes(db: VegapunkDatabase) {
+export function createMcpRoutes(db: VegapunkDatabase, options: McpServerOptions = {}) {
   return new Elysia()
     .all("/mcp", async ({ request }) => {
       if (!isLocalMcpRequest(request)) {
@@ -56,7 +61,7 @@ export function createMcpRoutes(db: VegapunkDatabase) {
         });
       }
 
-      const server = createMcpServer(db);
+      const server = createMcpServer(db, options);
       const transport = new WebStandardStreamableHTTPServerTransport({
         enableJsonResponse: true,
       });

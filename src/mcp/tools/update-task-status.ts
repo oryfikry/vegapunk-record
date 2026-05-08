@@ -6,7 +6,8 @@ import { taskStatuses } from "../../db";
 export const updateTaskStatusInputSchema = {
   task_id: z.string().trim().min(1),
   status: z.enum(taskStatuses),
-  agent_id: z.string().trim().min(1),
+  agent_id: z.string().trim().min(1).optional(),
+  message: z.string().trim().optional(),
 };
 
 export const updateTaskStatusOutputSchema = {
@@ -22,7 +23,8 @@ export const updateTaskStatusOutputSchema = {
 export type UpdateTaskStatusInput = {
   task_id: string;
   status: TaskStatus;
-  agent_id: string;
+  agent_id?: string | undefined;
+  message?: string | undefined;
 };
 
 type UpdateTaskStatusStructuredOutput = {
@@ -38,7 +40,7 @@ function toolError(message: string): CallToolResult {
 }
 
 export async function updateTaskStatusTool(db: VegapunkDatabase, input: UpdateTaskStatusInput): Promise<CallToolResult> {
-  if (!db.agents.getById(input.agent_id)) {
+  if (input.agent_id && !db.agents.getById(input.agent_id)) {
     return toolError(`Agent not found: ${input.agent_id}`);
   }
 
@@ -49,6 +51,18 @@ export async function updateTaskStatusTool(db: VegapunkDatabase, input: UpdateTa
   const task = db.tasks.update(input.task_id, { status: input.status });
   if (!task) {
     return toolError(`Task not found: ${input.task_id}`);
+  }
+
+  if (input.message !== undefined) {
+    db.activities.create({
+      agent_id: input.agent_id ?? null,
+      task_id: input.task_id,
+      type: "task_update",
+      level: "info",
+      source: input.agent_id ?? "system",
+      message: input.message,
+      metadata: { status: input.status },
+    });
   }
 
   const payload: UpdateTaskStatusStructuredOutput = {

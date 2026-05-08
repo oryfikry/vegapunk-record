@@ -8,7 +8,11 @@
     "ses_1fa60c531ffeTZGZHOstAuhku4",
     "ses_1fa4c32b5ffeFIDabIUmySlUvg",
     "ses_1fa4bce91ffectmwRCHfVCgNFK",
-    "ses_1fa4b98fcffeWtPKqmv2leC3x3"
+    "ses_1fa4b98fcffeWtPKqmv2leC3x3",
+    "ses_1fa3a6249ffep8DuwGmK7Dc7HH",
+    "ses_1fa3a1f85ffe99gDZ23TBsjj1Y",
+    "ses_1fa39d0c9ffe6gQXILUfiBP2ne",
+    "ses_1fa3997f5ffep7aWRyhIfIfht9"
   ],
   "session_origins": {
     "ses_1fa9e9b3fffeIJ1LLlSJ1GgvTk": "direct",
@@ -17,7 +21,11 @@
     "ses_1fa60c531ffeTZGZHOstAuhku4": "appended",
     "ses_1fa4c32b5ffeFIDabIUmySlUvg": "appended",
     "ses_1fa4bce91ffectmwRCHfVCgNFK": "appended",
-    "ses_1fa4b98fcffeWtPKqmv2leC3x3": "appended"
+    "ses_1fa4b98fcffeWtPKqmv2leC3x3": "appended",
+    "ses_1fa3a6249ffep8DuwGmK7Dc7HH": "appended",
+    "ses_1fa3a1f85ffe99gDZ23TBsjj1Y": "appended",
+    "ses_1fa39d0c9ffe6gQXILUfiBP2ne": "appended",
+    "ses_1fa3997f5ffep7aWRyhIfIfht9": "appended"
   },
   "plan_name": "vegapunk-record-roadmap",
   "agent": "atlas",
@@ -66,6 +74,15 @@
       "agent": "Sisyphus-Junior",
       "category": "unspecified-high",
       "updated_at": "2026-05-08T04:05:16.728Z"
+    },
+    "final-wave:f1": {
+      "task_key": "final-wave:f1",
+      "task_label": "F1",
+      "task_title": "Plan Compliance Audit — oracle",
+      "session_id": "ses_1fa35e8bfffe3B1DMRN4j1AHRz",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-05-08T04:18:04.242Z"
     }
   }
 }
