@@ -61,3 +61,9 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Added shared satellite config/client exports in `src/satellite/`; the client accepts `STELLA_URL` (default `http://127.0.0.1:3000`), registers agents, posts activity, patches task status, wraps connection refusal as a controlled error, and supports optional mocked or Streamable HTTP MCP tool calls.
 - Added bounded `--once` scripts for `scripts/satellites/lilith.ts` and `scripts/satellites/shaka.ts`; they perform one registration/activity cycle only and do not implement autonomous planning, negotiation, marketplace, or long-running loops.
 - Offline tests in `test/satellites/` mock Stella HTTP and MCP transport so `bun test test/satellites/` does not require a running server.
+
+## Task 10 - Nightly Sleep Routine
+- The current schema stores knowledge category as `knowledge_items.collection`; sleep summaries therefore use collection `core_knowledge` and optional flush deletes only derived `ephemeral_memory` knowledge rows plus their embedding jobs.
+- Sleep idempotency is metadata-based: summaries write `metadata.kind = "sleep_summary"` and exact `source_activity_ids`, and reruns filter those activity IDs before creating new summaries.
+- `scripts/sleep.ts` uses `createDatabase(SQLITE_PATH ?? "./data/punk-records.sqlite")`, relying on the DB facade to run migrations and seed agents; no scheduler, Chroma connection, or real LLM key is required.
+- Verification passed: LSP diagnostics on new sleep files had 0 diagnostics, `bun test test/sleep/` reported 4 pass/0 fail, `bun run typecheck` exited 0, and `bun run sleep` exited 0 on an empty DB. Evidence: `.sisyphus/evidence/task-10-sleep-empty.txt` and `.sisyphus/evidence/task-10-sleep-summary.json`.
