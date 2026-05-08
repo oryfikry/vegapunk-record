@@ -4,13 +4,13 @@
       context: .
       dockerfile: Dockerfile
     ports:
-      - "127.0.0.1:3000:3000"
+      - "127.0.0.1:3003:3003"
     depends_on:
       chroma:
         condition: service_healthy
     environment:
       HOST: 127.0.0.1
-      PORT: 3000
+      PORT: 3003
       SQLITE_PATH: /app/data/punk-records.sqlite
       CHROMA_HOST: chroma
       CHROMA_PORT: 8000
@@ -18,7 +18,7 @@
     volumes:
       - stella-data:/app/data
     healthcheck:
-      test: ["CMD-SHELL", "bun -e \"const response = await fetch('http://127.0.0.1:3000/health'); if (!response.ok) process.exit(1);\""]
+      test: ["CMD-SHELL", "bun -e \"const response = await fetch('http://127.0.0.1:3003/health'); if (!response.ok) process.exit(1);\""]
       interval: 10s
       timeout: 5s
       retries: 5

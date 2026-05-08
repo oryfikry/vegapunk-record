@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       HOST: 127.0.0.1
-      PORT: 3000
+      PORT: 3003
       SQLITE_PATH: ./data/punk-records.sqlite
       CHROMA_HOST: 127.0.0.1
       CHROMA_PORT: 8000
