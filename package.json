@@ -12,7 +12,9 @@
         "lint:placeholder": "bun run scripts/lint-placeholder.ts",
         "lint": "bun run lint:placeholder",
         "sleep": "bun run scripts/sleep-placeholder.ts",
-        "smoke": "bun run scripts/smoke-placeholder.ts"
+        "smoke": "bun run scripts/smoke-placeholder.ts",
+        "satellite:lilith": "bun run scripts/satellites/lilith.ts --once",
+        "satellite:shaka": "bun run scripts/satellites/shaka.ts --once"
     },
     "devDependencies": {
         "@types/bun": "latest",

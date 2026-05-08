@@ -1,0 +1,11 @@
+﻿{
+  "task": 8,
+  "satellite": "lilith",
+  "mode": "--once",
+  "stella": "mocked/offline in test/satellites/lilith.test.ts",
+  "expectedCycle": {
+    "register": "POST /api/agents/register",
+    "activity": ["message", "summary"],
+    "bounded": true
+  }
+}
