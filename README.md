@@ -18,7 +18,7 @@ Vegapunk-Record is a local-first MVP for observing Satellite agent work through 
    ```sh
    bun run dev
    ```
-4. Open the dashboard at `http://127.0.0.1:3000/` or check health with `GET http://127.0.0.1:3000/health`.
+4. Open the dashboard at `http://127.0.0.1:3003/` or check health with `GET http://127.0.0.1:3003/health`.
 
 For a complete self-starting MVP smoke, run:
 
@@ -33,7 +33,7 @@ The smoke writes evidence to `.sisyphus/evidence/task-12-full-smoke.json` and `.
 | Variable | Default | Purpose |
 | --- | --- | --- |
 | `HOST` | `127.0.0.1` | Stella bind host. v1 is localhost-only and refuses broad `0.0.0.0` binding by default. |
-| `PORT` | `3000` | Stella HTTP port. |
+| `PORT` | `3003` | Stella HTTP port. |
 | `SQLITE_PATH` | `./data/punk-records.sqlite` | Canonical Punk Records SQLite database path. |
 | `CHROMA_HOST` | `127.0.0.1` | Chroma host for derived vector search. |
 | `CHROMA_PORT` | `8000` | Chroma port for derived vector search. |
@@ -42,9 +42,16 @@ The smoke writes evidence to `.sisyphus/evidence/task-12-full-smoke.json` and `.
 | `OPENAI_API_KEY` | blank | Optional OpenAI key; not required for tests or smoke. |
 | `GEMINI_API_KEY` | blank | Optional Gemini key; not required for tests or smoke. |
 | `OLLAMA_BASE_URL` | `http://127.0.0.1:11434` | Optional local Ollama endpoint. |
+| `CLIPROXY_BASE_URL` | blank | Optional OpenAI-compatible Cliproxy base URL; leave blank unless enabling Cliproxy locally. |
+| `CLIPROXY_API_KEY` | blank | Optional Cliproxy API key; missing keys return controlled non-retryable errors. |
+| `CLIPROXY_MODEL` | blank | Optional Cliproxy model override; defaults to the provider's local placeholder model when unset. |
 | `SMOKE_START_SERVER` | unset | Set to `1` to let `bun run smoke` start and stop Stella automatically. |
 | `SMOKE_MODE` | unset | Set to `degraded` to run only degraded smoke. |
 | `SLEEP_FLUSH_EPHEMERAL` | unset | Set to `1` or `true` for `bun run sleep` to flush ephemeral knowledge after summarization. |
+
+### Optional Cliproxy onboarding
+
+Cliproxy is an optional OpenAI-compatible LLM proxy for local onboarding. To enable it, keep `.env.example` unchanged, copy it to `.env`, set `LLM_PROVIDER=cliproxy`, and fill only your local `CLIPROXY_BASE_URL`, `CLIPROXY_API_KEY`, and optional `CLIPROXY_MODEL` values in `.env`. Tests, smoke, Docker, and CI continue to use `LLM_PROVIDER=mock` by default and do not require Cliproxy keys or make Cliproxy network calls.
 
 ## Commands
 
@@ -69,14 +76,14 @@ The smoke writes evidence to `.sisyphus/evidence/task-12-full-smoke.json` and `.
 - **ChromaDB**: derived vector index for `ephemeral_memory`, `core_knowledge`, and `activity_logs`; it can be deleted and rebuilt from SQLite.
 - **MCP tools**: Streamable HTTP endpoint at `/mcp` with `sync_to_records`, `query_records`, and `update_task_status` for Satellite interoperability.
 - **Dashboard**: static `public/index.html` served at `/`, using Alpine.js and Tailwind CDN without a frontend build step.
-- **LLM router**: provider abstraction for mock, OpenRouter, OpenAI, Gemini, and Ollama; mock is deterministic and safe for CI.
+- **LLM router**: provider abstraction for mock, OpenRouter, OpenAI, Gemini, Ollama, and optional Cliproxy; mock is deterministic and safe for CI.
 - **Sleep routine**: `bun run sleep` summarizes eligible recent activity into `core_knowledge` and queues derived embedding jobs without autonomous scheduling.
 
 ## Degraded Modes
 
 - **Chroma down**: ingestion remains SQLite-only and continues to work. `GET /api/knowledge/search?q=...` catches Chroma failures and returns `{ degraded: true, results: [...] }` from SQLite `LIKE` fallback over knowledge items and activity logs.
 - **Mock LLM**: `LLM_PROVIDER=mock` produces deterministic local responses and is the default for tests, smoke, Docker, and CI.
-- **Missing remote LLM keys**: OpenRouter, OpenAI, and Gemini adapters report unavailable and throw controlled non-retryable errors when their API keys are blank; no smoke or test path requires real keys.
+- **Missing remote LLM keys**: OpenRouter, OpenAI, Gemini, and Cliproxy adapters report unavailable and throw controlled non-retryable errors when required local config is blank; no smoke or test path requires real keys.
 - **Local-only MCP**: `/mcp` rejects non-local Host or Origin headers before constructing the MCP transport.
 
 ## v1 Non-Goals
@@ -84,7 +91,7 @@ The smoke writes evidence to `.sisyphus/evidence/task-12-full-smoke.json` and `.
 - Hosted SaaS, billing, teams, OAuth, multi-user RBAC, and remote trust boundaries.
 - Kubernetes, cloud provisioning, TLS automation, production reverse proxying, or public internet exposure.
 - Frontend framework migration or frontend build pipeline.
-- Required real OpenRouter/OpenAI/Gemini/Ollama keys in tests, smoke, or CI.
+- Required real OpenRouter/OpenAI/Gemini/Ollama/Cliproxy keys in tests, smoke, or CI.
 - ChromaDB as source of truth; SQLite remains canonical.
 - LLM, embedding, or vector database calls inside ingestion request transactions.
 - Autonomous multi-agent orchestration beyond bounded sample Satellite scripts.

@@ -702,7 +702,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
 ## Success Criteria
 - The implementation is runnable locally from a fresh clone with documented commands.
-- Stella starts on `127.0.0.1:3000` and reports healthy without Chroma or remote LLM keys.
+- Stella starts on `127.0.0.1:3003` and reports healthy without Chroma or remote LLM keys.
 - `lilith` and `shaka` can register and emit activity.
 - Activity persists in SQLite and displays on the dashboard.
 - MCP tools perform sync/query/task-update flows with schema validation.
