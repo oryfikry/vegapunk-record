@@ -32,3 +32,12 @@
 - Task and activity APIs validate plan enums at the HTTP boundary, return JSON 400/404 errors, support empty list responses, and use only SQLite repositories inside request handlers; no Chroma, embeddings, or LLM calls were added.
 - GET /api/activity filters repository results by gent_id, 	ask_id, and 	ype; GET /api/stream/activity returns a server-sent-events stream with a ready event and publishes new activity records to subscribers.
 - Verification passed: lsp_diagnostics on src/server and 	est/api had 0 diagnostics, un test test/api/ reported 12 pass/0 fail, and un run typecheck exited 0. Evidence: .sisyphus/evidence/task-4-activity-happy.json and .sisyphus/evidence/task-4-activity-invalid.json.
+
+## Task 5 - Static Dashboard MVP
+- Built public/index.html as a no-build Alpine.js + Tailwind CDN dashboard with four panels: Agent Control Panel, Stella Interface, Knowledge Stream, and Settings Modal.
+- Root GET / now serves the dashboard HTML from public/index.html while /public remains mounted for static assets; API route logic under src/server/routes was not modified.
+- Dashboard fetches /api/agents, /api/tasks, /api/activity?limit=50, and /api/config, handles zero-data empty states, redacts secret-like text client-side, and listens to /api/stream/activity via EventSource when available.
+- Added a safe /api/config response from createApp config values only; tests verify no secret-shaped config keys are exposed.
+- Verification target is bun test test/dashboard/ plus bun run typecheck; evidence snapshot stored at .sisyphus/evidence/task-5-dashboard.html.
+
+Task 5 security review follow-up: narrowed public /api/config to service + llmProvider only, removed topology/path/runtime fields from the dashboard response, and added a CSP meta policy while preserving required Tailwind and Alpine CDN usage.

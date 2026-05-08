@@ -1,0 +1,530 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:; base-uri 'none'; object-src 'none'">
+  <title>Stella Command Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=Manrope:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ink: "rgb(var(--color-ink) / <alpha-value>)",
+            panel: "rgb(var(--color-panel) / <alpha-value>)",
+            panelStrong: "rgb(var(--color-panel-strong) / <alpha-value>)",
+            line: "rgb(var(--color-line) / <alpha-value>)",
+            mist: "rgb(var(--color-mist) / <alpha-value>)",
+            muted: "rgb(var(--color-muted) / <alpha-value>)",
+            signal: "rgb(var(--color-signal) / <alpha-value>)",
+            amber: "rgb(var(--color-amber) / <alpha-value>)",
+            danger: "rgb(var(--color-danger) / <alpha-value>)"
+          },
+          fontFamily: {
+            display: ["Fraunces", "Georgia", "serif"],
+            body: ["Manrope", "ui-sans-serif", "sans-serif"],
+            mono: ["IBM Plex Mono", "ui-monospace", "monospace"]
+          },
+          boxShadow: {
+            panel: "var(--shadow-panel)",
+            glow: "var(--shadow-glow)"
+          },
+          borderRadius: {
+            panel: "var(--radius-panel)",
+            soft: "var(--radius-soft)"
+          }
+        }
+      }
+    };
+  </script>
+  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <style>
+    :root {
+      --color-ink: 5 9 14;
+      --color-panel: 13 23 32;
+      --color-panel-strong: 20 35 48;
+      --color-line: 57 79 96;
+      --color-mist: 231 242 238;
+      --color-muted: 140 162 172;
+      --color-signal: 62 230 206;
+      --color-amber: 246 189 96;
+      --color-danger: 255 104 104;
+      --radius-panel: 1.5rem;
+      --radius-soft: 1rem;
+      --shadow-panel: 0 1.5rem 4rem rgb(0 0 0 / .35), inset 0 1px 0 rgb(255 255 255 / .06);
+      --shadow-glow: 0 0 3rem rgb(62 230 206 / .18);
+      --grid-size: 3.5rem;
+    }
+
+    [x-cloak] { display: none !important; }
+
+    body {
+      background:
+        radial-gradient(circle at 12% 8%, rgb(var(--color-signal) / .14), transparent 28rem),
+        radial-gradient(circle at 82% 16%, rgb(var(--color-amber) / .12), transparent 26rem),
+        linear-gradient(135deg, rgb(5 9 14), rgb(9 18 25) 44%, rgb(3 6 10));
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .32;
+      background-image:
+        linear-gradient(rgb(255 255 255 / .035) 1px, transparent 1px),
+        linear-gradient(90deg, rgb(255 255 255 / .035) 1px, transparent 1px);
+      background-size: var(--grid-size) var(--grid-size);
+      mask-image: linear-gradient(to bottom, black, transparent 82%);
+    }
+
+    .panel {
+      border: 1px solid rgb(var(--color-line) / .55);
+      border-radius: var(--radius-panel);
+      background: linear-gradient(145deg, rgb(var(--color-panel) / .92), rgb(var(--color-panel-strong) / .72));
+      box-shadow: var(--shadow-panel);
+      backdrop-filter: blur(1.25rem);
+    }
+
+    .panel-title {
+      font-family: Fraunces, Georgia, serif;
+      letter-spacing: -.035em;
+    }
+
+    .eyebrow {
+      color: rgb(var(--color-signal));
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: .72rem;
+      font-weight: 600;
+      letter-spacing: .2em;
+      text-transform: uppercase;
+    }
+
+    .badge {
+      border: 1px solid rgb(var(--color-line) / .55);
+      border-radius: 999px;
+      background: rgb(var(--color-ink) / .42);
+      color: rgb(var(--color-mist));
+      font-family: "IBM Plex Mono", ui-monospace, monospace;
+      font-size: .72rem;
+      line-height: 1;
+      padding: .45rem .65rem;
+    }
+
+    .badge-signal { border-color: rgb(var(--color-signal) / .5); color: rgb(var(--color-signal)); }
+    .badge-amber { border-color: rgb(var(--color-amber) / .52); color: rgb(var(--color-amber)); }
+    .badge-danger { border-color: rgb(var(--color-danger) / .58); color: rgb(var(--color-danger)); }
+
+    .empty-state {
+      border: 1px dashed rgb(var(--color-line) / .72);
+      border-radius: var(--radius-soft);
+      background: rgb(var(--color-ink) / .25);
+      color: rgb(var(--color-muted));
+      padding: 1rem;
+    }
+
+    .focus-ring:focus-visible {
+      outline: 2px solid rgb(var(--color-signal));
+      outline-offset: 3px;
+    }
+  </style>
+</head>
+<body class="min-h-screen overflow-x-hidden font-body text-mist antialiased">
+  <main
+    x-data="stellaDashboard()"
+    x-init="init()"
+    class="relative mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10"
+  >
+    <header class="grid gap-6 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
+      <section class="panel relative overflow-hidden p-6 sm:p-8">
+        <div class="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-signal/15 blur-3xl"></div>
+        <p class="eyebrow">Vegapunk-Record / Stella Ops</p>
+        <h1 class="panel-title mt-4 max-w-3xl text-5xl leading-[.92] text-mist sm:text-6xl lg:text-7xl">
+          Static dashboard for local-first agent command.
+        </h1>
+        <p class="mt-5 max-w-2xl text-base leading-7 text-muted sm:text-lg">
+          A no-build Alpine.js and Tailwind CSS control surface for agents, Stella activity, live knowledge signals, and safe runtime settings.
+        </p>
+      </section>
+
+      <aside class="panel p-6">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="eyebrow">System Pulse</p>
+            <p class="mt-3 text-3xl font-semibold text-mist" x-text="agents.length + ' agents'"></p>
+          </div>
+          <span class="badge" :class="streamStatus === 'live' ? 'badge-signal' : streamStatus === 'error' ? 'badge-danger' : 'badge-amber'" x-text="streamStatusLabel()"></span>
+        </div>
+        <dl class="mt-6 grid grid-cols-3 gap-3 text-center">
+          <div class="rounded-soft border border-line/45 bg-ink/25 p-3">
+            <dt class="font-mono text-xs uppercase tracking-widest text-muted">Tasks</dt>
+            <dd class="mt-2 text-2xl font-semibold text-mist" x-text="tasks.length"></dd>
+          </div>
+          <div class="rounded-soft border border-line/45 bg-ink/25 p-3">
+            <dt class="font-mono text-xs uppercase tracking-widest text-muted">Logs</dt>
+            <dd class="mt-2 text-2xl font-semibold text-mist" x-text="activity.length"></dd>
+          </div>
+          <div class="rounded-soft border border-line/45 bg-ink/25 p-3">
+            <dt class="font-mono text-xs uppercase tracking-widest text-muted">Mode</dt>
+            <dd class="mt-2 truncate text-lg font-semibold text-signal" x-text="config.llmProvider || 'mock'"></dd>
+          </div>
+        </dl>
+        <button type="button" class="focus-ring mt-5 w-full rounded-soft border border-signal/50 bg-signal/10 px-4 py-3 font-mono text-sm font-semibold uppercase tracking-[.2em] text-signal transition hover:bg-signal/20" @click="openSettings()">
+          Open Settings Modal
+        </button>
+      </aside>
+    </header>
+
+    <section class="grid gap-6 lg:grid-cols-[.95fr_1.05fr]">
+      <article class="panel p-6 sm:p-7">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p class="eyebrow">Panel 01</p>
+            <h2 class="panel-title mt-2 text-3xl text-mist">Agent Control Panel</h2>
+          </div>
+          <button type="button" class="focus-ring rounded-full border border-line/60 px-4 py-2 font-mono text-xs uppercase tracking-[.18em] text-muted transition hover:border-signal/70 hover:text-signal" @click="loadAgents()">
+            Refresh
+          </button>
+        </div>
+
+        <div class="mt-6 space-y-3" x-show="agents.length > 0">
+          <template x-for="agent in agents" :key="agent.id">
+            <div class="group rounded-soft border border-line/50 bg-ink/30 p-4 transition hover:border-signal/50 hover:bg-ink/45">
+              <div class="flex items-center justify-between gap-4">
+                <div>
+                  <p class="text-xl font-semibold text-mist" x-text="agent.name"></p>
+                  <p class="mt-1 font-mono text-xs uppercase tracking-[.18em] text-muted" x-text="agent.id + ' / ' + agent.role"></p>
+                </div>
+                <span class="badge" :class="statusBadge(agent.status)" x-text="agent.status"></span>
+              </div>
+              <p class="mt-3 text-sm leading-6 text-muted" x-text="agent.custom_llm ? 'Custom LLM: ' + agent.custom_llm : 'Using default Stella routing.'"></p>
+            </div>
+          </template>
+        </div>
+
+        <div class="empty-state mt-6" x-show="!loading.agents && agents.length === 0">
+          No agents are registered yet. The control panel will populate automatically when `/api/agents` returns Stella satellites.
+        </div>
+        <div class="empty-state mt-6 border-danger/50 text-danger" x-show="errors.agents" x-text="errors.agents"></div>
+
+        <div class="mt-6 border-t border-line/45 pt-5">
+          <div class="flex items-center justify-between gap-4">
+            <h3 class="font-mono text-sm uppercase tracking-[.18em] text-muted">Task Queue</h3>
+            <span class="badge" x-text="tasks.length + ' total'"></span>
+          </div>
+          <div class="mt-3 space-y-2" x-show="tasks.length > 0">
+            <template x-for="task in tasks.slice(0, 4)" :key="task.task_id">
+              <div class="rounded-soft border border-line/40 bg-panelStrong/45 p-3">
+                <div class="flex items-center justify-between gap-3">
+                  <p class="truncate text-sm font-semibold text-mist" x-text="task.description"></p>
+                  <span class="badge" :class="statusBadge(task.status)" x-text="task.status"></span>
+                </div>
+                <p class="mt-2 font-mono text-xs text-muted" x-text="'assigned: ' + (task.assigned_to || 'unassigned')"></p>
+              </div>
+            </template>
+          </div>
+          <p class="empty-state mt-3 text-sm" x-show="!loading.tasks && tasks.length === 0">No tasks are queued. Stella is idle and ready for the next local command.</p>
+        </div>
+      </article>
+
+      <article class="panel p-6 sm:p-7">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+          <div>
+            <p class="eyebrow">Panel 02</p>
+            <h2 class="panel-title mt-2 text-3xl text-mist">Stella Interface</h2>
+          </div>
+          <span class="badge badge-signal">POST /api/activity</span>
+        </div>
+
+        <form class="mt-6 space-y-4" @submit.prevent="submitStellaMessage()">
+          <label class="block">
+            <span class="font-mono text-xs uppercase tracking-[.18em] text-muted">Agent source</span>
+            <select class="focus-ring mt-2 w-full rounded-soft border border-line/60 bg-ink/55 px-4 py-3 text-mist" x-model="messageAgent" :disabled="agents.length === 0">
+              <template x-for="agent in agents" :key="agent.id">
+                <option :value="agent.id" x-text="agent.name + ' (' + agent.id + ')'"></option>
+              </template>
+            </select>
+          </label>
+          <label class="block">
+            <span class="font-mono text-xs uppercase tracking-[.18em] text-muted">Message</span>
+            <textarea class="focus-ring mt-2 min-h-32 w-full resize-y rounded-soft border border-line/60 bg-ink/55 px-4 py-3 text-mist placeholder:text-muted/70" x-model="messageText" placeholder="Ask Stella to record a local observation..." :disabled="agents.length === 0"></textarea>
+          </label>
+          <div class="flex flex-wrap items-center justify-between gap-3">
+            <p class="text-sm text-muted" x-text="stellaStatus"></p>
+            <button type="submit" class="focus-ring rounded-full bg-signal px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[.2em] text-ink transition hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-45" :disabled="agents.length === 0 || sending || messageText.trim().length === 0">
+              <span x-show="!sending">Transmit</span>
+              <span x-show="sending">Sending</span>
+            </button>
+          </div>
+        </form>
+
+        <div class="empty-state mt-5" x-show="!loading.agents && agents.length === 0">
+          Stella Interface is waiting for an agent source before posting activity.
+        </div>
+
+        <div class="mt-6 grid gap-3 sm:grid-cols-2">
+          <div class="rounded-soft border border-line/45 bg-ink/25 p-4">
+            <p class="font-mono text-xs uppercase tracking-[.18em] text-muted">Service</p>
+            <p class="mt-2 truncate text-lg font-semibold text-mist" x-text="config.service || 'loading config'"></p>
+          </div>
+          <div class="rounded-soft border border-line/45 bg-ink/25 p-4">
+            <p class="font-mono text-xs uppercase tracking-[.18em] text-muted">Provider</p>
+            <p class="mt-2 truncate text-lg font-semibold text-mist" x-text="config.llmProvider || 'mock'"></p>
+          </div>
+        </div>
+      </article>
+    </section>
+
+    <section class="panel p-6 sm:p-7">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="eyebrow">Panel 03</p>
+          <h2 class="panel-title mt-2 text-3xl text-mist">Knowledge Stream</h2>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <span class="badge" x-text="'/api/activity · ' + activity.length"></span>
+          <span class="badge" :class="streamStatus === 'live' ? 'badge-signal' : 'badge-amber'" x-text="streamStatusLabel()"></span>
+        </div>
+      </div>
+
+      <div class="mt-6 space-y-3" x-show="activity.length > 0">
+        <template x-for="entry in activity.slice(0, 12)" :key="entry.id">
+          <article class="rounded-soft border border-line/45 bg-ink/30 p-4">
+            <div class="flex flex-wrap items-center justify-between gap-3">
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="badge" :class="levelBadge(entry.level)" x-text="entry.level"></span>
+                <span class="badge" x-text="entry.type"></span>
+                <span class="badge badge-amber" x-show="Number(entry.redacted) === 1">redacted</span>
+              </div>
+              <time class="font-mono text-xs text-muted" x-text="formatTime(entry.timestamp)"></time>
+            </div>
+            <p class="mt-4 text-base leading-7 text-mist" x-text="redactText(entry.message)"></p>
+            <p class="mt-3 font-mono text-xs text-muted" x-text="(entry.agent_id || 'system') + ' · ' + entry.source"></p>
+          </article>
+        </template>
+      </div>
+
+      <div class="empty-state mt-6" x-show="!loading.activity && activity.length === 0">
+        No activity logs yet. The Knowledge Stream is connected to `/api/activity` and will listen to `/api/stream/activity` when the browser supports EventSource.
+      </div>
+      <div class="empty-state mt-6 border-danger/50 text-danger" x-show="errors.activity" x-text="errors.activity"></div>
+    </section>
+
+    <section class="panel p-6 sm:p-7">
+      <div class="flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <p class="eyebrow">Panel 04</p>
+          <h2 class="panel-title mt-2 text-3xl text-mist">Settings Modal</h2>
+          <p class="mt-3 max-w-2xl text-sm leading-6 text-muted">
+            Safe runtime values load from `/api/config`. Secret-like keys are filtered before display and never rendered in the modal.
+          </p>
+        </div>
+        <button type="button" class="focus-ring rounded-full border border-amber/60 bg-amber/10 px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[.2em] text-amber transition hover:bg-amber/20" @click="openSettings()">
+          Review Config
+        </button>
+      </div>
+    </section>
+
+    <div class="fixed inset-0 z-50 flex items-center justify-center bg-ink/75 p-5 backdrop-blur-md" x-show="settingsOpen" x-cloak x-transition.opacity @keydown.escape.window="settingsOpen = false" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+      <section class="panel max-h-[90vh] w-full max-w-2xl overflow-y-auto p-6 sm:p-7" @click.outside="settingsOpen = false">
+        <div class="flex items-start justify-between gap-4">
+          <div>
+            <p class="eyebrow">Safe Configuration</p>
+            <h2 id="settings-title" class="panel-title mt-2 text-3xl text-mist">Settings Modal</h2>
+          </div>
+          <button type="button" class="focus-ring rounded-full border border-line/60 px-3 py-2 font-mono text-xs uppercase tracking-[.18em] text-muted hover:text-mist" @click="settingsOpen = false">Close</button>
+        </div>
+
+        <div class="mt-6 space-y-3" x-show="Object.keys(safeConfig()).length > 0">
+          <template x-for="item in Object.entries(safeConfig())" :key="item[0]">
+            <div class="flex flex-wrap items-center justify-between gap-3 rounded-soft border border-line/45 bg-ink/35 p-4">
+              <span class="font-mono text-xs uppercase tracking-[.18em] text-muted" x-text="item[0]"></span>
+              <span class="max-w-full break-words text-right text-sm font-semibold text-mist" x-text="String(item[1])"></span>
+            </div>
+          </template>
+        </div>
+        <div class="empty-state mt-6" x-show="Object.keys(safeConfig()).length === 0 && !errors.config">No safe config values are available yet.</div>
+        <div class="empty-state mt-6 border-danger/50 text-danger" x-show="errors.config" x-text="errors.config"></div>
+        <p class="mt-5 text-sm leading-6 text-muted">Filtered keys include secret, token, password, cookie, authorization, and API key patterns.</p>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    function stellaDashboard() {
+      const secretPattern = /(secret|token|password|cookie|authorization|api[_-]?key|private[_-]?key)/i;
+
+      return {
+        agents: [],
+        tasks: [],
+        activity: [],
+        config: {},
+        messageAgent: "stella",
+        messageText: "",
+        stellaStatus: "Ready to write a redacted activity log.",
+        streamStatus: "connecting",
+        settingsOpen: false,
+        sending: false,
+        loading: { agents: true, tasks: true, activity: true, config: true },
+        errors: { agents: "", tasks: "", activity: "", config: "" },
+
+        async init() {
+          await Promise.all([this.loadAgents(), this.loadTasks(), this.loadActivity(), this.loadConfig()]);
+          this.connectActivityStream();
+        },
+
+        async fetchJson(path, fallback, errorKey) {
+          try {
+            const response = await fetch(path, { headers: { accept: "application/json" } });
+            if (!response.ok) {
+              throw new Error(`${response.status} ${response.statusText}`.trim());
+            }
+            return await response.json();
+          } catch (error) {
+            this.errors[errorKey] = `Unable to load ${path}: ${error instanceof Error ? error.message : "unknown error"}`;
+            return fallback;
+          }
+        },
+
+        async loadAgents() {
+          this.loading.agents = true;
+          this.errors.agents = "";
+          this.agents = await this.fetchJson("/api/agents", [], "agents");
+          if (!this.agents.some((agent) => agent.id === this.messageAgent) && this.agents[0]) {
+            this.messageAgent = this.agents[0].id;
+          }
+          this.loading.agents = false;
+        },
+
+        async loadTasks() {
+          this.loading.tasks = true;
+          this.errors.tasks = "";
+          this.tasks = await this.fetchJson("/api/tasks", [], "tasks");
+          this.loading.tasks = false;
+        },
+
+        async loadActivity() {
+          this.loading.activity = true;
+          this.errors.activity = "";
+          this.activity = await this.fetchJson("/api/activity?limit=50", [], "activity");
+          this.loading.activity = false;
+        },
+
+        async loadConfig() {
+          this.loading.config = true;
+          this.errors.config = "";
+          this.config = await this.fetchJson("/api/config", {}, "config");
+          this.loading.config = false;
+        },
+
+        connectActivityStream() {
+          if (!("EventSource" in window)) {
+            this.streamStatus = "fallback";
+            return;
+          }
+
+          const events = new EventSource("/api/stream/activity");
+          events.addEventListener("ready", () => {
+            this.streamStatus = "live";
+          });
+          events.addEventListener("activity", (event) => {
+            try {
+              const entry = JSON.parse(event.data);
+              this.activity = [entry, ...this.activity.filter((item) => item.id !== entry.id)].slice(0, 50);
+            } catch {
+              this.streamStatus = "fallback";
+            }
+          });
+          events.onerror = () => {
+            this.streamStatus = "fallback";
+          };
+        },
+
+        async submitStellaMessage() {
+          if (!this.messageText.trim() || !this.messageAgent) {
+            return;
+          }
+
+          this.sending = true;
+          this.stellaStatus = "Transmitting activity to Stella...";
+          try {
+            const response = await fetch("/api/activity", {
+              method: "POST",
+              headers: { "content-type": "application/json", accept: "application/json" },
+              body: JSON.stringify({
+                agent_id: this.messageAgent,
+                type: "message",
+                level: "info",
+                source: "dashboard",
+                message: this.redactText(this.messageText),
+                metadata: { origin: "static-dashboard" }
+              })
+            });
+
+            if (!response.ok) {
+              throw new Error(`${response.status} ${response.statusText}`.trim());
+            }
+
+            const entry = await response.json();
+            this.activity = [entry, ...this.activity.filter((item) => item.id !== entry.id)].slice(0, 50);
+            this.messageText = "";
+            this.stellaStatus = "Activity recorded. Knowledge Stream will mirror it live when SSE is connected.";
+          } catch (error) {
+            this.stellaStatus = `Activity failed: ${error instanceof Error ? error.message : "unknown error"}`;
+          } finally {
+            this.sending = false;
+          }
+        },
+
+        safeConfig() {
+          return Object.fromEntries(Object.entries(this.config).filter(([key]) => !secretPattern.test(key)));
+        },
+
+        redactText(value) {
+          return String(value ?? "")
+            .replace(/Bearer\s+[A-Za-z0-9._~+/=-]+/g, "Bearer [redacted]")
+            .replace(/(api[_-]?key|token|password|secret)\s*[:=]\s*[^\s,;]+/gi, "$1=[redacted]");
+        },
+
+        openSettings() {
+          this.settingsOpen = true;
+          if (Object.keys(this.config).length === 0) {
+            this.loadConfig();
+          }
+        },
+
+        streamStatusLabel() {
+          if (this.streamStatus === "live") return "SSE live";
+          if (this.streamStatus === "fallback") return "polling fallback";
+          if (this.streamStatus === "error") return "stream error";
+          return "connecting";
+        },
+
+        statusBadge(status) {
+          if (["active", "in_progress", "completed"].includes(status)) return "badge-signal";
+          if (["blocked", "pending", "inactive"].includes(status)) return "badge-amber";
+          if (["error", "failed", "cancelled"].includes(status)) return "badge-danger";
+          return "";
+        },
+
+        levelBadge(level) {
+          if (level === "error") return "badge-danger";
+          if (level === "warn") return "badge-amber";
+          return "badge-signal";
+        },
+
+        formatTime(value) {
+          if (!value) return "unknown time";
+          const date = new Date(value);
+          return Number.isNaN(date.getTime()) ? value : date.toLocaleString();
+        }
+      };
+    }
+  </script>
+</body>
+</html>

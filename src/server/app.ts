@@ -1,10 +1,13 @@
-﻿import { staticPlugin } from "@elysiajs/static";
+﻿import { readFileSync } from "node:fs";
+import { staticPlugin } from "@elysiajs/static";
 import { Elysia } from "elysia";
 import type { StellaConfig } from "../config";
 import { defaultConfig } from "../config";
 import type { VegapunkDatabase } from "../db";
 import { createErrorHandler } from "./error-handler";
 import { ActivityStream, createActivityRoutes, createActivityStreamRoutes, createAgentsRoutes, createTasksRoutes } from "./routes";
+
+const dashboardHtml = readFileSync(new URL("../../public/index.html", import.meta.url), "utf8");
 
 export type CreateAppOptions = {
   db: VegapunkDatabase;
@@ -24,10 +27,14 @@ export function createApp({ db, config = defaultConfig }: CreateAppOptions) {
     .use(createActivityStreamRoutes(activityStream))
     .onError(createErrorHandler(config.nodeEnv))
     .get("/health", () => ({ ok: true, service: "stella" as const }))
+    .get("/api/config", () => ({
+      service: "stella" as const,
+      llmProvider: config.llmProvider,
+    }))
     .get("/", ({ set }) => {
       set.headers["content-type"] = "text/html; charset=utf-8";
 
-      return "<!doctype html><html lang=\"en\"><head><title>Stella</title></head><body><main><h1>Stella</h1><p>Vegapunk-Record dashboard placeholder.</p></main></body></html>";
+      return dashboardHtml;
     });
 }
 
