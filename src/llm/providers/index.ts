@@ -1,3 +1,4 @@
+export { CliproxyProvider } from "./cliproxy";
 export { GeminiProvider } from "./gemini";
 export { MockProvider } from "./mock";
 export { OllamaProvider } from "./ollama";
