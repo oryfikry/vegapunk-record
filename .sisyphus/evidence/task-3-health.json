@@ -1,0 +1,16 @@
+﻿{
+  "task": "Plan Task 3 - Stella health",
+  "route": "GET /health",
+  "expected": { "ok": true, "service": "stella" },
+  "httpStatus": 200,
+  "verification": {
+    "diagnostics": "lsp_diagnostics on src/server, src/config, src/security, src/index.ts, and test/server reported 0 diagnostics",
+    "serverTests": "bun test test/server/ exited 0 with 5 pass, 0 fail",
+    "typecheck": "bun run typecheck exited 0"
+  },
+  "notes": [
+    "Tests use Elysia in-process app.handle(new Request(...)) without binding a real port.",
+    "Health does not require Chroma or LLM availability.",
+    "Default host remains 127.0.0.1 and default port remains 3000."
+  ]
+}

@@ -1,21 +1,25 @@
 ﻿{
-  "name": "vegapunk-record",
-  "version": "0.1.0",
-  "private": true,
-  "type": "module",
-  "description": "Local-first Vegapunk-Record scaffold for Stella and Satellites.",
-  "scripts": {
-    "dev": "bun run src/index.ts",
-    "start": "bun run src/index.ts",
-    "test": "bun test",
-    "typecheck": "tsc --noEmit",
-    "lint:placeholder": "bun run scripts/lint-placeholder.ts",
-    "lint": "bun run lint:placeholder",
-    "sleep": "bun run scripts/sleep-placeholder.ts",
-    "smoke": "bun run scripts/smoke-placeholder.ts"
-  },
-  "devDependencies": {
-    "@types/bun": "latest",
-    "typescript": "^5.4.0"
-  }
+    "name":  "vegapunk-record",
+    "version":  "0.1.0",
+    "private":  true,
+    "type":  "module",
+    "description":  "Local-first Vegapunk-Record scaffold for Stella and Satellites.",
+    "scripts":  {
+                    "dev":  "bun run src/server/index.ts",
+                    "start":  "bun run src/server/index.ts",
+                    "test":  "bun test",
+                    "typecheck":  "tsc --noEmit",
+                    "lint:placeholder":  "bun run scripts/lint-placeholder.ts",
+                    "lint":  "bun run lint:placeholder",
+                    "sleep":  "bun run scripts/sleep-placeholder.ts",
+                    "smoke":  "bun run scripts/smoke-placeholder.ts"
+                },
+    "devDependencies":  {
+                            "@types/bun":  "latest",
+                            "typescript":  "^5.4.0"
+                        },
+    "dependencies":  {
+                         "@elysiajs/static":  "^1.4.10",
+                         "elysia":  "^1.4.28"
+                     }
 }

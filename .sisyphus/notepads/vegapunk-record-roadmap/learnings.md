@@ -11,3 +11,10 @@
 - Repository modules enforce required enums in TypeScript before writes/queries and use `crypto.randomUUID()` plus ISO 8601 timestamps for non-agent records.
 - Seeding is idempotent via `ON CONFLICT(id) DO NOTHING` for `stella`, `lilith`, and `shaka`; tests use temporary file-backed SQLite databases because WAL is not meaningful for `:memory:`.
 - Verification passed: `lsp_diagnostics` on `src/db` and `test/db` had 0 diagnostics, `bun test test/db/` reported 5 pass/0 fail, and `bun run typecheck` exited 0. Evidence: `.sisyphus/evidence/task-2-db-init.txt` and `.sisyphus/evidence/task-2-db-invalid-enums.txt`.
+
+## Task 3 - Stella Server, Config, Health, and Safe Logging
+- Added Elysia dependencies (`elysia`, `@elysiajs/static`) and pointed `dev`/`start` at `src/server/index.ts` while preserving the existing `src/index.ts` scaffold exports.
+- `src/server/app.ts` now creates an in-process-testable Elysia app with `GET /health`, a placeholder `GET /`, `/public` static mounting, DB/config decorators, and centralized JSON error handling from `src/server/error-handler.ts`.
+- Config loading in `src/config/loader.ts` follows env vars > SQLite `configs` rows > safe defaults, keeps `127.0.0.1:3000` as the default bind, and does not require Chroma or LLM availability for health.
+- Safe logging and redaction live in `src/security/redact.ts`, masking API-key prefixes, Bearer tokens, Cookie headers, SSH private key headers, env-style secrets, and secret-like structured log fields.
+- Verification passed: `lsp_diagnostics` on modified server/config/security/root/test files had 0 diagnostics, `bun test test/server/` reported 5 pass/0 fail, and `bun run typecheck` exited 0. Evidence: `.sisyphus/evidence/task-3-health.json` and `.sisyphus/evidence/task-3-redaction.txt`.

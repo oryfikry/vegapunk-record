@@ -1,0 +1,17 @@
+﻿Plan Task 3 redaction evidence
+
+Covered patterns:
+- API keys beginning with sk- and key-
+- Bearer tokens
+- Cookie header values
+- SSH private key headers
+- .env-style secret assignments such as API_KEY=, TOKEN=, PASSWORD=, and KEY=
+- Structured JSON log context fields with secret-like names
+
+Verification:
+- lsp_diagnostics on src/security reported 0 diagnostics.
+- bun test test/server/ exited 0 with 5 pass, 0 fail.
+- bun run typecheck exited 0.
+
+Safety note:
+- This evidence intentionally omits raw secret samples. Test fixtures use synthetic placeholders and assert those raw values are absent after redaction.
