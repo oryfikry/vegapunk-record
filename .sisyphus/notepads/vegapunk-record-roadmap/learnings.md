@@ -91,5 +91,8 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 ## 2026-05-08T13:09:03.2047450+07:00 - Stella local port 3003 update
 - Updated Stella local/default/exposed port references from 3000 to 3003 in `.env.example`, `.github/workflows/ci.yml`, `Dockerfile`, `docker-compose.yml`, `src/config/loader.ts`, `src/satellite/config.ts`, `src/satellite/client.ts`, `scripts/smoke.ts`, `README.md`, and `test/scaffold.test.ts`; preserved default host `127.0.0.1` and Chroma port `8000`.
 
-## 2026-05-08T13:13:03.7121342+07:00 - Optional Cliproxy onboarding provider
-- Added optional Cliproxy onboarding/provider config across `.env.example`, `README.md`, `src/llm/types.ts`, `src/llm/router.ts`, `src/llm/providers/index.ts`, `src/llm/providers/cliproxy.ts`, and `test/llm/router.test.ts`; `LLM_PROVIDER=mock` remains the documented default, while `cliproxy` is recognized only when selected and missing `CLIPROXY_BASE_URL`/`CLIPROXY_API_KEY` fails before any network call with a non-retryable provider error.
+## 2026-05-08T13:13:03.7121342+07:00 - Optional custom LLM onboarding provider
+- Added optional OpenAI-compatible custom LLM provider config across `.env.example`, `README.md`, `src/llm/types.ts`, `src/llm/router.ts`, `src/llm/providers/index.ts`, `src/llm/providers/custom.ts`, and `test/llm/router.test.ts`; `LLM_PROVIDER=mock` remains the documented default, while `custom` is recognized only when selected and missing `CUSTOM_LLM_BASE_URL`/`CUSTOM_LLM_API_KEY` fails before any network call with a non-retryable provider error.
+
+## 2026-05-08T13:23:44.3246909+07:00 - Generic custom LLM provider rename
+- Renamed the optional OpenAI-compatible provider from provider-specific naming to generic custom LLM naming across `.env.example`, `README.md`, `src/llm/types.ts`, `src/llm/router.ts`, `src/llm/providers/index.ts`, `src/llm/providers/custom.ts`, and `test/llm/router.test.ts`; `LLM_PROVIDER=custom` is now the opt-in provider and blank `CUSTOM_LLM_BASE_URL`/`CUSTOM_LLM_API_KEY` still fail before any network call with a non-retryable provider error.

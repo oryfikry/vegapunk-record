@@ -42,16 +42,16 @@ The smoke writes evidence to `.sisyphus/evidence/task-12-full-smoke.json` and `.
 | `OPENAI_API_KEY` | blank | Optional OpenAI key; not required for tests or smoke. |
 | `GEMINI_API_KEY` | blank | Optional Gemini key; not required for tests or smoke. |
 | `OLLAMA_BASE_URL` | `http://127.0.0.1:11434` | Optional local Ollama endpoint. |
-| `CLIPROXY_BASE_URL` | blank | Optional OpenAI-compatible Cliproxy base URL; leave blank unless enabling Cliproxy locally. |
-| `CLIPROXY_API_KEY` | blank | Optional Cliproxy API key; missing keys return controlled non-retryable errors. |
-| `CLIPROXY_MODEL` | blank | Optional Cliproxy model override; defaults to the provider's local placeholder model when unset. |
+| `CUSTOM_LLM_BASE_URL` | blank | Optional OpenAI-compatible custom LLM base URL; leave blank unless enabling a custom provider locally. |
+| `CUSTOM_LLM_API_KEY` | blank | Optional custom LLM API key; missing keys return controlled non-retryable errors. |
+| `CUSTOM_LLM_MODEL` | blank | Optional custom LLM model override; defaults to the provider's local placeholder model when unset. |
 | `SMOKE_START_SERVER` | unset | Set to `1` to let `bun run smoke` start and stop Stella automatically. |
 | `SMOKE_MODE` | unset | Set to `degraded` to run only degraded smoke. |
 | `SLEEP_FLUSH_EPHEMERAL` | unset | Set to `1` or `true` for `bun run sleep` to flush ephemeral knowledge after summarization. |
 
-### Optional Cliproxy onboarding
+### Optional Custom LLM provider onboarding
 
-Cliproxy is an optional OpenAI-compatible LLM proxy for local onboarding. To enable it, keep `.env.example` unchanged, copy it to `.env`, set `LLM_PROVIDER=cliproxy`, and fill only your local `CLIPROXY_BASE_URL`, `CLIPROXY_API_KEY`, and optional `CLIPROXY_MODEL` values in `.env`. Tests, smoke, Docker, and CI continue to use `LLM_PROVIDER=mock` by default and do not require Cliproxy keys or make Cliproxy network calls.
+The custom LLM provider is an optional OpenAI-compatible endpoint for local onboarding. To enable it, keep `.env.example` unchanged, copy it to `.env`, set `LLM_PROVIDER=custom`, and fill only your local `CUSTOM_LLM_BASE_URL`, `CUSTOM_LLM_API_KEY`, and optional `CUSTOM_LLM_MODEL` values in `.env`. Tests, smoke, Docker, and CI continue to use `LLM_PROVIDER=mock` by default and do not require custom provider keys or make custom provider network calls.
 
 ## Commands
 
@@ -76,14 +76,14 @@ Cliproxy is an optional OpenAI-compatible LLM proxy for local onboarding. To ena
 - **ChromaDB**: derived vector index for `ephemeral_memory`, `core_knowledge`, and `activity_logs`; it can be deleted and rebuilt from SQLite.
 - **MCP tools**: Streamable HTTP endpoint at `/mcp` with `sync_to_records`, `query_records`, and `update_task_status` for Satellite interoperability.
 - **Dashboard**: static `public/index.html` served at `/`, using Alpine.js and Tailwind CDN without a frontend build step.
-- **LLM router**: provider abstraction for mock, OpenRouter, OpenAI, Gemini, Ollama, and optional Cliproxy; mock is deterministic and safe for CI.
+- **LLM router**: provider abstraction for mock, OpenRouter, OpenAI, Gemini, Ollama, and an optional custom OpenAI-compatible provider; mock is deterministic and safe for CI.
 - **Sleep routine**: `bun run sleep` summarizes eligible recent activity into `core_knowledge` and queues derived embedding jobs without autonomous scheduling.
 
 ## Degraded Modes
 
 - **Chroma down**: ingestion remains SQLite-only and continues to work. `GET /api/knowledge/search?q=...` catches Chroma failures and returns `{ degraded: true, results: [...] }` from SQLite `LIKE` fallback over knowledge items and activity logs.
 - **Mock LLM**: `LLM_PROVIDER=mock` produces deterministic local responses and is the default for tests, smoke, Docker, and CI.
-- **Missing remote LLM keys**: OpenRouter, OpenAI, Gemini, and Cliproxy adapters report unavailable and throw controlled non-retryable errors when required local config is blank; no smoke or test path requires real keys.
+- **Missing remote LLM keys**: OpenRouter, OpenAI, Gemini, and custom provider adapters report unavailable and throw controlled non-retryable errors when required local config is blank; no smoke or test path requires real keys.
 - **Local-only MCP**: `/mcp` rejects non-local Host or Origin headers before constructing the MCP transport.
 
 ## v1 Non-Goals
@@ -91,7 +91,7 @@ Cliproxy is an optional OpenAI-compatible LLM proxy for local onboarding. To ena
 - Hosted SaaS, billing, teams, OAuth, multi-user RBAC, and remote trust boundaries.
 - Kubernetes, cloud provisioning, TLS automation, production reverse proxying, or public internet exposure.
 - Frontend framework migration or frontend build pipeline.
-- Required real OpenRouter/OpenAI/Gemini/Ollama/Cliproxy keys in tests, smoke, or CI.
+- Required real OpenRouter/OpenAI/Gemini/Ollama/custom provider keys in tests, smoke, or CI.
 - ChromaDB as source of truth; SQLite remains canonical.
 - LLM, embedding, or vector database calls inside ingestion request transactions.
 - Autonomous multi-agent orchestration beyond bounded sample Satellite scripts.
