@@ -87,3 +87,9 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - `update_task_status` now supports optional `agent_id` and optional `message`; when `message` is present it logs a `task_update` activity from the agent or `system`.
 - Config routes own both GET and PATCH under `/api/config`; PATCH only updates existing rows with `is_secret = 0`, preserving each row's type and returning 403 for secret keys.
 - Verification passed: `bun test` (61 pass) and `bun run typecheck` (exit 0).
+
+## 2026-05-08T13:09:03.2047450+07:00 - Stella local port 3003 update
+- Updated Stella local/default/exposed port references from 3000 to 3003 in `.env.example`, `.github/workflows/ci.yml`, `Dockerfile`, `docker-compose.yml`, `src/config/loader.ts`, `src/satellite/config.ts`, `src/satellite/client.ts`, `scripts/smoke.ts`, `README.md`, and `test/scaffold.test.ts`; preserved default host `127.0.0.1` and Chroma port `8000`.
+
+## 2026-05-08T13:13:03.7121342+07:00 - Optional Cliproxy onboarding provider
+- Added optional Cliproxy onboarding/provider config across `.env.example`, `README.md`, `src/llm/types.ts`, `src/llm/router.ts`, `src/llm/providers/index.ts`, `src/llm/providers/cliproxy.ts`, and `test/llm/router.test.ts`; `LLM_PROVIDER=mock` remains the documented default, while `cliproxy` is recognized only when selected and missing `CLIPROXY_BASE_URL`/`CLIPROXY_API_KEY` fails before any network call with a non-retryable provider error.
