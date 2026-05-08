@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test";
-import { CliproxyProvider, GeminiProvider, LLMRouter, MockProvider, OllamaProvider, OpenAIProvider, OpenRouterProvider } from "../../src/llm";
+import { CustomProvider, GeminiProvider, LLMRouter, MockProvider, OllamaProvider, OpenAIProvider, OpenRouterProvider } from "../../src/llm";
 import type { LLMProvider } from "../../src/llm";
 
 function unavailableProvider(name: "openai" | "openrouter" | "gemini"): LLMProvider {
@@ -67,37 +67,37 @@ describe("LLMRouter", () => {
     }
   });
 
-  test("default providers include Cliproxy when selected by config", () => {
-    const router = new LLMRouter({ provider: "cliproxy" });
+  test("default providers include custom provider when selected by config", () => {
+    const router = new LLMRouter({ provider: "custom" });
 
-    expect(router.getProvider("cliproxy")?.name).toBe("cliproxy");
+    expect(router.getProvider("custom")?.name).toBe("custom");
   });
 
-  test("Cliproxy reports unavailable and throws non-retryable errors when onboarding config is missing", async () => {
+  test("custom provider reports unavailable and throws non-retryable errors when onboarding config is missing", async () => {
     const fetchCalls: unknown[] = [];
     const originalFetch = globalThis.fetch;
     globalThis.fetch = ((input: unknown) => {
       fetchCalls.push(input);
-      return Promise.reject(new Error("Cliproxy missing-config test must not call network"));
+      return Promise.reject(new Error("custom provider missing-config test must not call network"));
     }) as unknown as typeof fetch;
 
     try {
-      const missingBaseUrlAndApiKey = new CliproxyProvider({ baseUrl: "", apiKey: "" });
-      const missingApiKey = new CliproxyProvider({ baseUrl: "https://cliproxy.local/v1", apiKey: "" });
-      const missingBaseUrl = new CliproxyProvider({ baseUrl: "", apiKey: "cliproxy-test-key" });
+      const missingBaseUrlAndApiKey = new CustomProvider({ baseUrl: "", apiKey: "" });
+      const missingApiKey = new CustomProvider({ baseUrl: "https://custom-llm.local/v1", apiKey: "" });
+      const missingBaseUrl = new CustomProvider({ baseUrl: "", apiKey: "custom-test-key" });
 
       for (const provider of [missingBaseUrlAndApiKey, missingApiKey, missingBaseUrl]) {
         expect(await provider.isAvailable()).toBe(false);
       }
 
       await expect(missingBaseUrlAndApiKey.complete({ messages: [{ role: "user", content: "must not call network" }] })).rejects.toEqual({
-        provider: "cliproxy",
-        error: "CLIPROXY_BASE_URL is missing",
+        provider: "custom",
+        error: "CUSTOM_LLM_BASE_URL is missing",
         retryable: false,
       });
       await expect(missingApiKey.complete({ messages: [{ role: "user", content: "must not call network" }] })).rejects.toEqual({
-        provider: "cliproxy",
-        error: "CLIPROXY_API_KEY is missing",
+        provider: "custom",
+        error: "CUSTOM_LLM_API_KEY is missing",
         retryable: false,
       });
 
