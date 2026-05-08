@@ -1,0 +1,52 @@
+{
+  "task": "Task 6 - MCP Streamable HTTP Server Tools",
+  "kind": "happy-path",
+  "commands": [
+    {
+      "command": "bun run scripts/mcp-smoke.ts",
+      "exitCode": 0
+    },
+    {
+      "command": "bun test test/mcp/",
+      "exitCode": 0,
+      "summary": "6 pass, 0 fail, 23 expect() calls"
+    },
+    {
+      "command": "bun run typecheck",
+      "exitCode": 0
+    }
+  ],
+  "endpoint": "/mcp",
+  "transport": "@modelcontextprotocol/sdk WebStandardStreamableHTTPServerTransport (Streamable HTTP)",
+  "smokeResults": {
+    "sync_to_records": {
+      "isError": false,
+      "structuredContent": {
+        "ok": true,
+        "activity": {
+          "agent_id": "stella",
+          "type": "message",
+          "message": "MCP smoke activity"
+        }
+      }
+    },
+    "query_records": {
+      "isError": false,
+      "structuredContent": {
+        "ok": true,
+        "degraded": true,
+        "resultsContain": "MCP smoke activity"
+      }
+    },
+    "update_task_status": {
+      "isError": false,
+      "structuredContent": {
+        "ok": true,
+        "task": {
+          "assigned_to": "stella",
+          "status": "completed"
+        }
+      }
+    }
+  }
+}
