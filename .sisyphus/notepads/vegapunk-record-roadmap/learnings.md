@@ -33,7 +33,6 @@
 - GET /api/activity filters repository results by gent_id, 	ask_id, and 	ype; GET /api/stream/activity returns a server-sent-events stream with a ready event and publishes new activity records to subscribers.
 - Verification passed: lsp_diagnostics on src/server and 	est/api had 0 diagnostics, un test test/api/ reported 12 pass/0 fail, and un run typecheck exited 0. Evidence: .sisyphus/evidence/task-4-activity-happy.json and .sisyphus/evidence/task-4-activity-invalid.json.
 
-<<<<<<< HEAD
 ## Task 5 - Static Dashboard MVP
 - Built public/index.html as a no-build Alpine.js + Tailwind CDN dashboard with four panels: Agent Control Panel, Stella Interface, Knowledge Stream, and Settings Modal.
 - Root GET / now serves the dashboard HTML from public/index.html while /public remains mounted for static assets; API route logic under src/server/routes was not modified.

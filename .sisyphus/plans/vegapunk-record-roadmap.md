@@ -357,7 +357,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(api): add activity agent and task endpoints` | Files: `src/server/routes/**`, `src/domain/**`, `test/api/**`
 
-- [ ] 5. Implement Static Dashboard MVP
+- [x] 5. Implement Static Dashboard MVP
 
   **What to do**: Build `public/index.html` using Alpine.js and Tailwind CSS with four concrete panels: Agent Control Panel, Stella Interface, Knowledge Stream, and Settings Modal. Fetch data from Stella APIs, show empty states, display redacted activity logs, and connect to live activity stream/WebSocket if available. Serve static assets from Elysia.
   **Must NOT do**: Do not add React/Vue/Svelte, Vite, Webpack, complex charts, login UI, drag/drop workflow builder, or frontend build step.
@@ -396,7 +396,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(dashboard): add static stella dashboard` | Files: `public/**`, `src/server/static/**`, `test/dashboard/**`
 
-- [ ] 6. Implement MCP Streamable HTTP Server Tools
+- [x] 6. Implement MCP Streamable HTTP Server Tools
 
   **What to do**: Add MCP TypeScript SDK server integration with Streamable HTTP transport. Register `sync_to_records`, `query_records`, and `update_task_status` using explicit input/output schemas. Validate Host/Origin for local DNS rebinding protection. Return structured tool content and distinguish schema/tool errors from protocol errors. Add a scripted MCP client smoke test.
   **Must NOT do**: Do not implement custom MCP framing; do not make legacy SSE the primary transport; do not bypass schema validation.
@@ -436,7 +436,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(mcp): add streamable http tools` | Files: `src/mcp/**`, `test/mcp/**`, `scripts/mcp-smoke.ts`
 
-- [ ] 7. Add ChromaDB Derived Index and Degraded Search
+- [x] 7. Add ChromaDB Derived Index and Degraded Search
 
   **What to do**: Add Chroma TS client wrapper, Docker compose Chroma service, `heartbeat()` readiness, `getOrCreateCollection` setup for `ephemeral_memory`, `core_knowledge`, and `activity_logs`, async/retryable `embedding_jobs`, SQLite fallback search, and rebuild-from-SQLite script. Chroma metadata must contain canonical SQLite IDs.
   **Must NOT do**: Do not expose destructive `reset` in runtime tools; do not fail ingestion when Chroma is unavailable; do not require Chroma for default unit tests.

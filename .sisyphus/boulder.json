@@ -5,13 +5,19 @@
     "ses_1fa9e9b3fffeIJ1LLlSJ1GgvTk",
     "ses_1fa618fd5ffeH7ubVbozI8JKda",
     "ses_1fa611229ffefOppzm5RmQHs8o",
-    "ses_1fa60c531ffeTZGZHOstAuhku4"
+    "ses_1fa60c531ffeTZGZHOstAuhku4",
+    "ses_1fa4c32b5ffeFIDabIUmySlUvg",
+    "ses_1fa4bce91ffectmwRCHfVCgNFK",
+    "ses_1fa4b98fcffeWtPKqmv2leC3x3"
   ],
   "session_origins": {
     "ses_1fa9e9b3fffeIJ1LLlSJ1GgvTk": "direct",
     "ses_1fa618fd5ffeH7ubVbozI8JKda": "appended",
     "ses_1fa611229ffefOppzm5RmQHs8o": "appended",
-    "ses_1fa60c531ffeTZGZHOstAuhku4": "appended"
+    "ses_1fa60c531ffeTZGZHOstAuhku4": "appended",
+    "ses_1fa4c32b5ffeFIDabIUmySlUvg": "appended",
+    "ses_1fa4bce91ffectmwRCHfVCgNFK": "appended",
+    "ses_1fa4b98fcffeWtPKqmv2leC3x3": "appended"
   },
   "plan_name": "vegapunk-record-roadmap",
   "agent": "atlas",
@@ -42,6 +48,15 @@
       "agent": "Sisyphus-Junior",
       "category": "deep",
       "updated_at": "2026-05-08T03:42:19.966Z"
+    },
+    "todo:8": {
+      "task_key": "todo:8",
+      "task_label": "8",
+      "task_title": "Implement Satellite MVP Scripts for Lilith and Shaka",
+      "session_id": "ses_1fa4b98fcffeWtPKqmv2leC3x3",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-low",
+      "updated_at": "2026-05-08T03:53:50.050Z"
     }
   }
 }
