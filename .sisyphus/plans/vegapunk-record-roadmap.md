@@ -678,20 +678,20 @@ Create a local-first Stella server that receives agent activity, persists it dur
 > **Do NOT auto-proceed after verification. Wait for user's explicit approval before marking work complete.**
 > **Never mark F1-F4 as checked before getting user's okay.** Rejection or user feedback -> fix -> re-run -> present again -> wait for okay.
 
-- [ ] F1. Plan Compliance Audit — oracle
+- [x] F1. Plan Compliance Audit — oracle
   - Verify implementation matches `Vegapunk-Record PRD.md` and this plan.
   - Confirm all Must NOT Have guardrails were respected.
   - Confirm SQLite is canonical and Chroma is derived.
 
-- [ ] F2. Code Quality Review — unspecified-high
+- [x] F2. Code Quality Review — unspecified-high
   - Run `bun run typecheck`, `bun test`, and inspect architecture boundaries.
   - Check validation, redaction, error handling, config precedence, and no test dependence on real provider keys.
 
-- [ ] F3. Real Manual QA — unspecified-high (+ playwright if UI)
+- [x] F3. Real Manual QA — unspecified-high (+ playwright if UI)
   - Execute `bun run smoke` and browser dashboard smoke.
   - Capture dashboard screenshots and API/MCP evidence.
 
-- [ ] F4. Scope Fidelity Check — deep
+- [x] F4. Scope Fidelity Check — deep
   - Confirm no hosted SaaS/RBAC/Kubernetes/frontend framework/autonomous orchestration scope creep.
   - Confirm final output is MVP vertical slice with documented deferred items.
 
