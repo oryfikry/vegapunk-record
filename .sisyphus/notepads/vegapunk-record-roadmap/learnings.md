@@ -57,6 +57,7 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Unit tests should inject a narrow ChromaGateway mock so Chroma is never required for bun test; degraded search falls back to SQLite LIKE over knowledge_items and activity_logs.
 - Task completed at 2026-05-08T03:34:06.2096668Z with chromadb installed via bun add and docker-compose chroma persistence at /chroma/chroma.
 
+<<<<<<< HEAD
 ## Task 8 - Satellite MVP Scripts for Lilith and Shaka
 - Added shared satellite config/client exports in `src/satellite/`; the client accepts `STELLA_URL` (default `http://127.0.0.1:3000`), registers agents, posts activity, patches task status, wraps connection refusal as a controlled error, and supports optional mocked or Streamable HTTP MCP tool calls.
 - Added bounded `--once` scripts for `scripts/satellites/lilith.ts` and `scripts/satellites/shaka.ts`; they perform one registration/activity cycle only and do not implement autonomous planning, negotiation, marketplace, or long-running loops.
@@ -67,3 +68,9 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Sleep idempotency is metadata-based: summaries write `metadata.kind = "sleep_summary"` and exact `source_activity_ids`, and reruns filter those activity IDs before creating new summaries.
 - `scripts/sleep.ts` uses `createDatabase(SQLITE_PATH ?? "./data/punk-records.sqlite")`, relying on the DB facade to run migrations and seed agents; no scheduler, Chroma connection, or real LLM key is required.
 - Verification passed: LSP diagnostics on new sleep files had 0 diagnostics, `bun test test/sleep/` reported 4 pass/0 fail, `bun run typecheck` exited 0, and `bun run sleep` exited 0 on an empty DB. Evidence: `.sisyphus/evidence/task-10-sleep-empty.txt` and `.sisyphus/evidence/task-10-sleep-summary.json`.
+
+## Task 11 - Local Docker Compose, CI, and Operational Hardening
+- Added local-only Docker hardening: Stella uses the official oven/bun image, binds host ports to 127.0.0.1, runs with LLM_PROVIDER=mock, persists SQLite under a named stella-data volume, and depends on Chroma health rather than remote provider keys.
+- Chroma remains derived/persistent via the chroma-data volume at /chroma/chroma with a heartbeat health check; production deployment concerns such as TLS, reverse proxying, Kubernetes, and secrets management stayed out of scope.
+- CI now installs with bun install --frozen-lockfile, typechecks, runs bun test, and validates docker compose config; evidence stored at .sisyphus/evidence/task-11-compose-config.txt.
+- scripts/smoke.ts exercises /health, agent registration, activity creation, and filtered activity query against an already-running Stella or a self-started local server when SMOKE_START_SERVER=1.

@@ -1,0 +1,8 @@
+﻿node_modules
+.env
+.env.*
+data/
+/chroma/
+.git
+dist
+.sisyphus/evidence
