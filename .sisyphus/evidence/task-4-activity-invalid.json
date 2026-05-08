@@ -1,0 +1,72 @@
+{
+  "task": "Task 4 - Activity and status invalid payloads",
+  "mode": "curl-equivalent in-process Elysia app.handle(new Request(...))",
+  "results": [
+    {
+      "request": {
+        "method": "POST",
+        "path": "/api/activity",
+        "json": {
+          "agent_id": "unknown",
+          "type": "message",
+          "message": "No agent"
+        }
+      },
+      "response": {
+        "status": 400,
+        "json": {
+          "error": "agent_id does not match a registered agent",
+          "status": 400
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "path": "/api/activity",
+        "json": {
+          "agent_id": "stella",
+          "type": "note",
+          "message": "Bad type"
+        }
+      },
+      "response": {
+        "status": 400,
+        "json_matches": {
+          "status": 400
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PATCH",
+        "path": "/api/tasks/missing-task/status",
+        "json": {
+          "status": "completed"
+        }
+      },
+      "response": {
+        "status": 404,
+        "json": {
+          "error": "Task not found",
+          "status": 404
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "PATCH",
+        "path": "/api/agents/lilith/status",
+        "json": {
+          "status": "paused"
+        }
+      },
+      "response": {
+        "status": 400,
+        "json_matches": {
+          "status": 400
+        }
+      }
+    }
+  ]
+}

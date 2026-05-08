@@ -25,3 +25,10 @@
 - `LLMRouter` reads `LLM_PROVIDER` when no provider is passed, defaults safely to `mock`, dispatches through `route(request)`, exposes `getProvider(name)`, and only falls back when `fallbackProvider` is explicitly configured.
 - Tests avoid real API keys and real remote calls by injecting empty keys and an unreachable local Ollama URL; `bun test test/llm/` reported 7 pass/0 fail.
 - Verification passed: `lsp_diagnostics` on `src/llm` and `test/llm` had 0 diagnostics, `bun test test/llm/` exited 0, and `bun run typecheck` exited 0. Evidence: `.sisyphus/evidence/task-9-llm-mock.txt` and `.sisyphus/evidence/task-9-llm-missing-keys.txt`.
+
+## Task 4 - Activity Ingestion, Agent Registration, and Task APIs
+- Added Elysia route groups under src/server/routes/ and mounted them in src/server/app.ts with .use(...), preserving the in-process createApp({ db, config }) test pattern.
+- Agent registration upserts through db.agents, forces ctive status, validates payloads, and emits Stella system activity events that are also published to the live activity stream.
+- Task and activity APIs validate plan enums at the HTTP boundary, return JSON 400/404 errors, support empty list responses, and use only SQLite repositories inside request handlers; no Chroma, embeddings, or LLM calls were added.
+- GET /api/activity filters repository results by gent_id, 	ask_id, and 	ype; GET /api/stream/activity returns a server-sent-events stream with a ready event and publishes new activity records to subscribers.
+- Verification passed: lsp_diagnostics on src/server and 	est/api had 0 diagnostics, un test test/api/ reported 12 pass/0 fail, and un run typecheck exited 0. Evidence: .sisyphus/evidence/task-4-activity-happy.json and .sisyphus/evidence/task-4-activity-invalid.json.

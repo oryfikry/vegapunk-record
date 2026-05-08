@@ -1,0 +1,94 @@
+{
+  "task": "Task 4 - Activity ingestion happy path",
+  "mode": "curl-equivalent in-process Elysia app.handle(new Request(...))",
+  "results": [
+    {
+      "request": {
+        "method": "POST",
+        "path": "/api/agents/register",
+        "json": {
+          "id": "atlas",
+          "name": "Atlas",
+          "role": "satellite",
+          "custom_llm": "ollama"
+        }
+      },
+      "response": {
+        "status": 201,
+        "json_matches": {
+          "id": "atlas",
+          "name": "Atlas",
+          "role": "satellite",
+          "status": "active",
+          "custom_llm": "ollama"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "path": "/api/tasks",
+        "json": {
+          "assigned_to": "stella",
+          "description": "Inspect logs"
+        }
+      },
+      "response": {
+        "status": 201,
+        "json_matches": {
+          "assigned_to": "stella",
+          "description": "Inspect logs",
+          "status": "pending"
+        },
+        "task_id": "generated UUID"
+      }
+    },
+    {
+      "request": {
+        "method": "POST",
+        "path": "/api/activity",
+        "json": {
+          "agent_id": "stella",
+          "task_id": "generated task_id",
+          "type": "message",
+          "message": "Activity captured",
+          "metadata": {
+            "ok": true
+          }
+        }
+      },
+      "response": {
+        "status": 201,
+        "json_matches": {
+          "agent_id": "stella",
+          "task_id": "generated task_id",
+          "type": "message",
+          "level": "info",
+          "source": "stella",
+          "message": "Activity captured",
+          "metadata_json": "{\"ok\":true}"
+        }
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/activity?agent_id=stella&type=message"
+      },
+      "response": {
+        "status": 200,
+        "json": "array containing the ingested Stella message activity"
+      }
+    },
+    {
+      "request": {
+        "method": "GET",
+        "path": "/api/stream/activity"
+      },
+      "response": {
+        "status": 200,
+        "content_type_contains": "text/event-stream"
+      }
+    }
+  ]
+}
