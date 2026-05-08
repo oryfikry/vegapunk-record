@@ -1,0 +1,31 @@
+Task 2 database initialization evidence
+
+Implemented files:
+- src/db/connection.ts
+- src/db/migrate.ts
+- src/db/migrations/001_initial_schema.sql
+- src/db/repositories/agents.ts
+- src/db/repositories/tasks.ts
+- src/db/repositories/configs.ts
+- src/db/repositories/activities.ts
+- src/db/repositories/knowledge.ts
+- src/db/repositories/embedding-jobs.ts
+- src/db/repositories/index.ts
+- src/db/seed.ts
+- src/db/index.ts
+- test/db/connection.test.ts
+- test/db/repositories.test.ts
+
+Behavior verified:
+- createDatabase(path) opens bun:sqlite with { create: true }.
+- PRAGMA journal_mode = WAL runs immediately after opening.
+- PRAGMA foreign_keys = ON runs before migrations and seed data.
+- runMigrations() creates _migrations and applies src/db/migrations/*.sql in sorted order.
+- Reopening the same SQLite file applies no duplicate migrations.
+- Seed data is stable and inserts Stella, Lilith, and Shaka once via ON CONFLICT DO NOTHING.
+
+Verification commands:
+- lsp_diagnostics on src/db: 0 diagnostics.
+- lsp_diagnostics on test/db: 0 diagnostics.
+- bun test test/db/: 5 pass, 0 fail, 21 expect() calls.
+- bun run typecheck: exited 0.

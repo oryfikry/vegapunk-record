@@ -1,0 +1,28 @@
+﻿name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  scaffold:
+    runs-on: ubuntu-latest
+    env:
+      HOST: 127.0.0.1
+      PORT: 3000
+      SQLITE_PATH: ./data/punk-records.sqlite
+      CHROMA_HOST: 127.0.0.1
+      CHROMA_PORT: 8000
+      LLM_PROVIDER: mock
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Test
+        run: bun test

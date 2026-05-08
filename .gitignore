@@ -1,0 +1,24 @@
+﻿node_modules/
+dist/
+coverage/
+
+# Local environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local data stores (SQLite canonical store and derived Chroma volumes later)
+data/
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+chroma/
+.chroma/
+chroma-data/
+
+# Runtime output
+logs/
+*.log
+*.tmp
+.DS_Store

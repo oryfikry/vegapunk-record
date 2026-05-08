@@ -1,0 +1,22 @@
+Task 2 invalid enum evidence
+
+Repository methods validate all required enums before writing or querying enum-constrained data.
+
+Validated enums:
+- Agent status: active, inactive, error.
+- Task status: pending, in_progress, blocked, completed, failed, cancelled.
+- Activity type: thought, message, tool_call, tool_result, task_update, system, error, summary.
+- Activity level: debug, info, warn, error.
+- Embedding job status: pending, processing, completed, failed.
+
+Test coverage in test/db/repositories.test.ts:
+- db.agents.create(... status: "paused") throws "Invalid agent status".
+- db.tasks.create(... status: "paused") throws "Invalid task status".
+- db.activities.create(... type: "note") throws "Invalid activity type".
+- db.activities.create(... level: "fatal") throws "Invalid activity level".
+- db.embeddingJobs.create(... status: "queued") throws "Invalid embedding job status".
+- db.embeddingJobs.listByStatus("queued") throws "Invalid embedding job status".
+
+Verification commands:
+- bun test test/db/: 5 pass, 0 fail, 21 expect() calls.
+- bun run typecheck: exited 0.
