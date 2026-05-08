@@ -1,0 +1,26 @@
+Task 9 missing-key and local readiness verification
+
+Remote provider behavior without real API keys:
+- OpenRouterProvider({ apiKey: "" }).isAvailable() returns false.
+- OpenAIProvider({ apiKey: "" }).isAvailable() returns false.
+- GeminiProvider({ apiKey: "" }).isAvailable() returns false.
+- complete() for each missing-key remote provider throws an LLMError-shaped object with retryable: false before any fetch call is made.
+
+Ollama local readiness behavior:
+- OllamaProvider({ baseUrl: "http://127.0.0.1:1", readinessTimeoutMs: 50 }).isAvailable() returns false for an unreachable local server.
+- Production default base URL remains Bun.env.OLLAMA_BASE_URL ?? "http://127.0.0.1:11434".
+
+Command: bun test test/llm/
+Result: exit 0
+Output:
+bun test v1.2.21 (7c45ed97)
+
+ 7 pass
+ 0 fail
+ 21 expect() calls
+Ran 7 tests across 2 files.
+
+Safety notes:
+- Tests do not require OPENROUTER_API_KEY, OPENAI_API_KEY, GEMINI_API_KEY, or a running Ollama server.
+- No API keys are stored in code, tests, SQLite, or evidence.
+- Remote adapter error handling redacts configured API keys from HTTP/error messages.

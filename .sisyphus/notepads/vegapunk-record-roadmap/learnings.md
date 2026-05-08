@@ -11,3 +11,10 @@
 - Repository modules enforce required enums in TypeScript before writes/queries and use `crypto.randomUUID()` plus ISO 8601 timestamps for non-agent records.
 - Seeding is idempotent via `ON CONFLICT(id) DO NOTHING` for `stella`, `lilith`, and `shaka`; tests use temporary file-backed SQLite databases because WAL is not meaningful for `:memory:`.
 - Verification passed: `lsp_diagnostics` on `src/db` and `test/db` had 0 diagnostics, `bun test test/db/` reported 5 pass/0 fail, and `bun run typecheck` exited 0. Evidence: `.sisyphus/evidence/task-2-db-init.txt` and `.sisyphus/evidence/task-2-db-invalid-enums.txt`.
+
+## Task 9 - LLM Router with Mock and Provider Adapters
+- Added `src/llm/types.ts` with the canonical `LLMRequest`, `LLMResponse`, `LLMError`, and `LLMProvider` interface, plus provider-name typing for `mock`, `openrouter`, `openai`, `gemini`, and `ollama`.
+- Implemented provider adapters behind one interface: `MockProvider` is deterministic and always available; OpenRouter/OpenAI/Gemini are env-gated and throw non-retryable `LLMError` objects when keys are missing; Ollama checks `/api/tags` with a 5s readiness timeout by default.
+- `LLMRouter` reads `LLM_PROVIDER` when no provider is passed, defaults safely to `mock`, dispatches through `route(request)`, exposes `getProvider(name)`, and only falls back when `fallbackProvider` is explicitly configured.
+- Tests avoid real API keys and real remote calls by injecting empty keys and an unreachable local Ollama URL; `bun test test/llm/` reported 7 pass/0 fail.
+- Verification passed: `lsp_diagnostics` on `src/llm` and `test/llm` had 0 diagnostics, `bun test test/llm/` exited 0, and `bun run typecheck` exited 0. Evidence: `.sisyphus/evidence/task-9-llm-mock.txt` and `.sisyphus/evidence/task-9-llm-missing-keys.txt`.
