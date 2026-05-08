@@ -16,7 +16,7 @@ export type ConfigEnvironment = Record<string, string | undefined>;
 
 export const defaultConfig: StellaConfig = {
   host: "127.0.0.1",
-  port: 3000,
+  port: 3003,
   sqlitePath: "./data/punk-records.sqlite",
   chromaHost: "127.0.0.1",
   chromaPort: 8000,

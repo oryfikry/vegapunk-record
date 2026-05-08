@@ -26,7 +26,7 @@ export type SatelliteDefinition = {
 
 type Env = Record<string, string | undefined>;
 
-const defaultStellaUrl = "http://127.0.0.1:3000";
+const defaultStellaUrl = "http://127.0.0.1:3003";
 
 function nonEmpty(value: string | undefined): string | undefined {
   const trimmed = value?.trim();

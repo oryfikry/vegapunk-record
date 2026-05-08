@@ -103,7 +103,7 @@ export class SatelliteClient {
   private readonly mcpToolCaller?: McpToolCaller | undefined;
 
   constructor(options: SatelliteClientOptions = {}) {
-    this.baseUrl = normalizeBaseUrl(options.baseUrl ?? "http://127.0.0.1:3000");
+    this.baseUrl = normalizeBaseUrl(options.baseUrl ?? "http://127.0.0.1:3003");
     this.fetchImpl = options.fetch ?? fetch;
     this.mcpToolCaller = options.mcpToolCaller;
   }
