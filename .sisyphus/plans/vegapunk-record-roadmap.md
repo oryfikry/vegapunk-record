@@ -279,7 +279,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(db): add sqlite schema and repositories` | Files: `src/db/**`, `test/db/**`
 
-- [ ] 3. Implement Stella Elysia Server, Config, Health, and Safe Logging
+- [x] 3. Implement Stella Elysia Server, Config, Health, and Safe Logging
 
   **What to do**: Create Elysia app with `GET /health`, config loading, structured JSON logging, secret redaction utilities, centralized error handling, and default localhost binding. Export app/server handlers for in-process tests. Add config precedence: env → SQLite configs → defaults.
   **Must NOT do**: Do not expose `0.0.0.0` by default; do not log raw secrets; do not require Chroma or LLM availability for health.
@@ -318,7 +318,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(stella): add server health config and logging` | Files: `src/server/**`, `src/config/**`, `src/security/**`, `test/server/**`
 
-- [ ] 4. Build Activity Ingestion, Agent Registration, and Task APIs
+- [x] 4. Build Activity Ingestion, Agent Registration, and Task APIs
 
   **What to do**: Implement HTTP routes for agent registration/status, task CRUD/status, activity ingestion/query, and live activity stream endpoint or WebSocket. Validate payloads, normalize events, persist to SQLite, emit Stella self-observability events, and support empty database states.
   **Must NOT do**: Do not call Chroma, embeddings, or LLM providers inside ingestion request transactions.
@@ -513,7 +513,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(satellites): add bounded lilith and shaka clients` | Files: `scripts/satellites/**`, `src/satellite/**`, `test/satellites/**`
 
-- [ ] 9. Implement LLM Router with Mock and Provider Adapters
+- [x] 9. Implement LLM Router with Mock and Provider Adapters
 
   **What to do**: Define `LLMProvider` interface and implement deterministic `mock`, OpenRouter, OpenAI, Gemini, and Ollama adapters. Normalize request/response/error shapes, timeouts, streaming flags where applicable, missing-key behavior, and provider readiness checks. Record provider call telemetry as activity logs without storing secrets.
   **Must NOT do**: Do not call remote providers in default tests/CI; do not assume OpenAI-compatible APIs support identical fields; do not hard-code model routing into business logic.

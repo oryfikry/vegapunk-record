@@ -4,6 +4,7 @@ import { Elysia } from "elysia";
 import type { StellaConfig } from "../config";
 import { defaultConfig } from "../config";
 import type { VegapunkDatabase } from "../db";
+import { createMcpRoutes } from "../mcp";
 import { createErrorHandler } from "./error-handler";
 import { ActivityStream, createActivityRoutes, createActivityStreamRoutes, createAgentsRoutes, createTasksRoutes } from "./routes";
 
@@ -25,6 +26,7 @@ export function createApp({ db, config = defaultConfig }: CreateAppOptions) {
     .use(createTasksRoutes(db))
     .use(createActivityRoutes(db, activityStream))
     .use(createActivityStreamRoutes(activityStream))
+    .use(createMcpRoutes(db))
     .onError(createErrorHandler(config.nodeEnv))
     .get("/health", () => ({ ok: true, service: "stella" as const }))
     .get("/api/config", () => ({

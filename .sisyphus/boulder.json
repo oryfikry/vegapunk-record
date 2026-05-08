@@ -2,10 +2,16 @@
   "active_plan": "D:\\AI\\vegapunk-record\\.sisyphus\\plans\\vegapunk-record-roadmap.md",
   "started_at": "2026-05-08T02:54:26.234Z",
   "session_ids": [
-    "ses_1fa9e9b3fffeIJ1LLlSJ1GgvTk"
+    "ses_1fa9e9b3fffeIJ1LLlSJ1GgvTk",
+    "ses_1fa618fd5ffeH7ubVbozI8JKda",
+    "ses_1fa611229ffefOppzm5RmQHs8o",
+    "ses_1fa60c531ffeTZGZHOstAuhku4"
   ],
   "session_origins": {
-    "ses_1fa9e9b3fffeIJ1LLlSJ1GgvTk": "direct"
+    "ses_1fa9e9b3fffeIJ1LLlSJ1GgvTk": "direct",
+    "ses_1fa618fd5ffeH7ubVbozI8JKda": "appended",
+    "ses_1fa611229ffefOppzm5RmQHs8o": "appended",
+    "ses_1fa60c531ffeTZGZHOstAuhku4": "appended"
   },
   "plan_name": "vegapunk-record-roadmap",
   "agent": "atlas",
@@ -18,6 +24,24 @@
       "agent": "Sisyphus-Junior",
       "category": "deep",
       "updated_at": "2026-05-08T03:13:26.093Z"
+    },
+    "todo:4": {
+      "task_key": "todo:4",
+      "task_label": "4",
+      "task_title": "Build Activity Ingestion, Agent Registration, and Task APIs",
+      "session_id": "ses_1fa691f88ffeTlY6hoj87SMdob",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-05-08T03:22:15.007Z"
+    },
+    "todo:5": {
+      "task_key": "todo:5",
+      "task_label": "5",
+      "task_title": "Implement Static Dashboard MVP",
+      "session_id": "ses_1fa60c531ffeTZGZHOstAuhku4",
+      "agent": "Sisyphus-Junior",
+      "category": "deep",
+      "updated_at": "2026-05-08T03:42:19.966Z"
     }
   }
 }

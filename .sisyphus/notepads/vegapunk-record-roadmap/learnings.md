@@ -41,3 +41,12 @@
 - Verification target is bun test test/dashboard/ plus bun run typecheck; evidence snapshot stored at .sisyphus/evidence/task-5-dashboard.html.
 
 Task 5 security review follow-up: narrowed public /api/config to service + llmProvider only, removed topology/path/runtime fields from the dashboard response, and added a CSP meta policy while preserving required Tailwind and Alpine CDN usage.
+
+## Task 6 - MCP Streamable HTTP Server Tools
+- Added `@modelcontextprotocol/sdk@1.29.0` and mounted a Streamable HTTP MCP endpoint at `/mcp` from `src/server/app.ts` via the new `src/mcp/` module.
+- The Bun/Elysia integration uses the SDK `McpServer` plus `WebStandardStreamableHTTPServerTransport` because Elysia handlers receive standard `Request` objects; no custom MCP framing or legacy SSE primary transport was implemented.
+- Registered `sync_to_records`, `query_records`, and `update_task_status` with explicit Zod v4 input/output schemas; tool handlers return text content plus structured output on success and `{ isError: true }` for controlled unknown-agent/unknown-task cases.
+- `/mcp` rejects non-local Host/Origin headers with 403 before constructing an MCP transport, covering local DNS rebinding protection for `localhost`, `127.0.0.1`, and `[::1]`/`::1` only.
+- `query_records` is intentionally SQLite-only and marks results as `degraded: true` to reflect Chroma being unavailable/not called for this task.
+- The SDK client transport type currently conflicts with this repo's `exactOptionalPropertyTypes` on the `sessionId` getter, so the client boundary in tests/smoke casts it to the SDK `Transport` interface while runtime behavior is verified through real client calls.
+- Verification passed: LSP diagnostics on `src/mcp`, `src/server/app.ts`, `test/mcp/tools.test.ts`, and `scripts/mcp-smoke.ts` had 0 diagnostics; `bun test test/mcp/` reported 6 pass/0 fail; `bun run typecheck` exited 0; `bun run scripts/mcp-smoke.ts` successfully called all three tools. Evidence: `.sisyphus/evidence/task-6-mcp-happy.json` and `.sisyphus/evidence/task-6-mcp-invalid.json`.

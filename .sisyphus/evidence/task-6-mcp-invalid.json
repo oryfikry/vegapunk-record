@@ -1,0 +1,52 @@
+{
+  "task": "Task 6 - MCP Streamable HTTP Server Tools",
+  "kind": "invalid-and-controlled-errors",
+  "commands": [
+    {
+      "command": "bun test test/mcp/",
+      "exitCode": 0,
+      "summary": "6 pass, 0 fail, 23 expect() calls"
+    },
+    {
+      "command": "bun run typecheck",
+      "exitCode": 0
+    }
+  ],
+  "validatedCases": {
+    "schemaValidation": {
+      "tool": "update_task_status",
+      "invalidArguments": {
+        "status": "paused"
+      },
+      "result": {
+        "isError": true,
+        "messageContains": "Invalid arguments"
+      }
+    },
+    "unknownAgent": {
+      "tool": "sync_to_records",
+      "invalidArguments": {
+        "agent_id": "unknown"
+      },
+      "result": {
+        "isError": true,
+        "messageContains": "Agent not found: unknown"
+      }
+    },
+    "unknownTask": {
+      "tool": "update_task_status",
+      "invalidArguments": {
+        "task_id": "missing-task"
+      },
+      "result": {
+        "isError": true,
+        "messageContains": "Task not found"
+      }
+    },
+    "dnsRebindingProtection": {
+      "badHostStatus": 403,
+      "badOriginStatus": 403,
+      "message": "MCP endpoint only accepts localhost Host and Origin headers"
+    }
+  }
+}
