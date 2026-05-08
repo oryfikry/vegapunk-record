@@ -1,0 +1,14 @@
+{
+    "degraded":  true,
+    "fallback":  "sqlite-like",
+    "metadata":  {
+                     "canonical_id_field":  "sqlite_id",
+                     "source":  "sqlite"
+                 },
+    "tables":  [
+                   "knowledge_items",
+                   "activity_logs"
+               ],
+    "scenario":  "chroma-down",
+    "verification":  "mocked ChromaGateway throws and search returns SQLite fallback results"
+}

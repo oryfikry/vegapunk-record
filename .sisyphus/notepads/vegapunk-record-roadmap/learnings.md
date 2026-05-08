@@ -33,6 +33,7 @@
 - GET /api/activity filters repository results by gent_id, 	ask_id, and 	ype; GET /api/stream/activity returns a server-sent-events stream with a ready event and publishes new activity records to subscribers.
 - Verification passed: lsp_diagnostics on src/server and 	est/api had 0 diagnostics, un test test/api/ reported 12 pass/0 fail, and un run typecheck exited 0. Evidence: .sisyphus/evidence/task-4-activity-happy.json and .sisyphus/evidence/task-4-activity-invalid.json.
 
+<<<<<<< HEAD
 ## Task 5 - Static Dashboard MVP
 - Built public/index.html as a no-build Alpine.js + Tailwind CDN dashboard with four panels: Agent Control Panel, Stella Interface, Knowledge Stream, and Settings Modal.
 - Root GET / now serves the dashboard HTML from public/index.html while /public remains mounted for static assets; API route logic under src/server/routes was not modified.
@@ -50,3 +51,9 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - `query_records` is intentionally SQLite-only and marks results as `degraded: true` to reflect Chroma being unavailable/not called for this task.
 - The SDK client transport type currently conflicts with this repo's `exactOptionalPropertyTypes` on the `sessionId` getter, so the client boundary in tests/smoke casts it to the SDK `Transport` interface while runtime behavior is verified through real client calls.
 - Verification passed: LSP diagnostics on `src/mcp`, `src/server/app.ts`, `test/mcp/tools.test.ts`, and `scripts/mcp-smoke.ts` had 0 diagnostics; `bun test test/mcp/` reported 6 pass/0 fail; `bun run typecheck` exited 0; `bun run scripts/mcp-smoke.ts` successfully called all three tools. Evidence: `.sisyphus/evidence/task-6-mcp-happy.json` and `.sisyphus/evidence/task-6-mcp-invalid.json`.
+
+## Task 7 - Chroma Derived Index and Degraded Search
+- Chroma is treated as derived state: wrapper modules expose heartbeat/getOrCreateCollection only, while canonical data and IDs stay in SQLite metadata via sqlite_id/source_table fields.
+- Existing embedding_jobs schema uses knowledge_item_id/activity_log_id, collection, attempts, and last_error; worker maps pending -> processing -> completed/failed and increments attempts on failure.
+- Unit tests should inject a narrow ChromaGateway mock so Chroma is never required for bun test; degraded search falls back to SQLite LIKE over knowledge_items and activity_logs.
+- Task completed at 2026-05-08T03:34:06.2096668Z with chromadb installed via bun add and docker-compose chroma persistence at /chroma/chroma.

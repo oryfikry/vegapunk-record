@@ -21,6 +21,7 @@
     "dependencies": {
         "@elysiajs/static": "^1.4.10",
         "@modelcontextprotocol/sdk": "^1.29.0",
+        "chromadb": "^3.4.3",
         "elysia": "^1.4.28"
     }
 }

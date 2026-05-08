@@ -1,0 +1,15 @@
+{
+    "degraded":  false,
+    "metadata":  {
+                     "canonical_id_field":  "sqlite_id",
+                     "source":  "sqlite"
+                 },
+    "verification":  "mocked ChromaGateway returns query results without real Chroma",
+    "scenario":  "chroma-up",
+    "collections":  [
+                        "ephemeral_memory",
+                        "core_knowledge",
+                        "activity_logs"
+                    ],
+    "primary":  "chroma"
+}
