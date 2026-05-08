@@ -32,3 +32,9 @@
 - Task and activity APIs validate plan enums at the HTTP boundary, return JSON 400/404 errors, support empty list responses, and use only SQLite repositories inside request handlers; no Chroma, embeddings, or LLM calls were added.
 - GET /api/activity filters repository results by gent_id, 	ask_id, and 	ype; GET /api/stream/activity returns a server-sent-events stream with a ready event and publishes new activity records to subscribers.
 - Verification passed: lsp_diagnostics on src/server and 	est/api had 0 diagnostics, un test test/api/ reported 12 pass/0 fail, and un run typecheck exited 0. Evidence: .sisyphus/evidence/task-4-activity-happy.json and .sisyphus/evidence/task-4-activity-invalid.json.
+
+## Task 7 - Chroma Derived Index and Degraded Search
+- Chroma is treated as derived state: wrapper modules expose heartbeat/getOrCreateCollection only, while canonical data and IDs stay in SQLite metadata via sqlite_id/source_table fields.
+- Existing embedding_jobs schema uses knowledge_item_id/activity_log_id, collection, attempts, and last_error; worker maps pending -> processing -> completed/failed and increments attempts on failure.
+- Unit tests should inject a narrow ChromaGateway mock so Chroma is never required for bun test; degraded search falls back to SQLite LIKE over knowledge_items and activity_logs.
+- Task completed at 2026-05-08T03:34:06.2096668Z with chromadb installed via bun add and docker-compose chroma persistence at /chroma/chroma.
