@@ -1,90 +1,90 @@
 {
   "ok": true,
   "mode": "full",
-  "startedAt": "2026-05-08T04:18:59.845Z",
-  "completedAt": "2026-05-08T04:19:00.429Z",
-  "baseUrl": "http://127.0.0.1:3000",
-  "sqlitePath": "./data/smoke.sqlite",
-  "searchTerm": "task12-smoke-1778213939845",
+  "startedAt": "2026-05-08T06:17:33.287Z",
+  "completedAt": "2026-05-08T06:17:33.885Z",
+  "baseUrl": "http://127.0.0.1:3003",
+  "sqlitePath": "./data/punk-records.sqlite",
+  "searchTerm": "task12-smoke-1778221053287",
   "checks": {
     "health": {
       "ok": true,
       "service": "stella"
     },
     "agent": {
-      "id": "smoke-1778213939845",
+      "id": "smoke-1778221053287",
       "name": "Smoke Test Agent",
       "role": "smoke-test",
       "status": "active",
       "custom_llm": null,
-      "created_at": "2026-05-08T04:19:00.361Z",
-      "updated_at": "2026-05-08T04:19:00.361Z"
+      "created_at": "2026-05-08T06:17:33.818Z",
+      "updated_at": "2026-05-08T06:17:33.818Z"
     },
     "task": {
-      "task_id": "3fd5ed42-2211-4b5d-91b6-98e81914071b",
-      "assigned_to": "smoke-1778213939845",
+      "task_id": "e5451e24-2798-4a93-98af-992ca565bb14",
+      "assigned_to": "smoke-1778221053287",
       "status": "pending",
-      "description": "Task 12 smoke task task12-smoke-1778213939845",
-      "created_at": "2026-05-08T04:19:00.364Z",
-      "updated_at": "2026-05-08T04:19:00.364Z"
+      "description": "Task 12 smoke task task12-smoke-1778221053287",
+      "created_at": "2026-05-08T06:17:33.822Z",
+      "updated_at": "2026-05-08T06:17:33.822Z"
     },
     "activity": {
-      "id": "c2f34cb1-9658-4564-9c5e-d51c90b95c76",
-      "timestamp": "2026-05-08T04:19:00.365Z",
-      "agent_id": "smoke-1778213939845",
-      "task_id": "3fd5ed42-2211-4b5d-91b6-98e81914071b",
+      "id": "f0fcaee1-31ea-427b-96a6-4d39217d56d9",
+      "timestamp": "2026-05-08T06:17:33.824Z",
+      "agent_id": "smoke-1778221053287",
+      "task_id": "e5451e24-2798-4a93-98af-992ca565bb14",
       "type": "message",
       "level": "info",
       "source": "smoke",
-      "message": "Smoke test activity task12-smoke-1778213939845",
+      "message": "Smoke test activity task12-smoke-1778221053287",
       "metadata_json": "{\"smoke\":true,\"task\":12}",
       "redacted": 0,
-      "created_at": "2026-05-08T04:19:00.365Z"
+      "created_at": "2026-05-08T06:17:33.824Z"
     },
     "activityQueryCount": 1,
     "mcp": {
       "sync": {
         "ok": true,
-        "activity_id": "43dc3ab1-bdc8-4801-9674-1022ad57bf42"
+        "activity_id": "34a40ed7-c54a-415c-b30e-2de44c18f103"
       },
       "query": {
         "ok": true,
         "degraded": true,
         "results": [
           {
-            "id": "43dc3ab1-bdc8-4801-9674-1022ad57bf42",
+            "id": "34a40ed7-c54a-415c-b30e-2de44c18f103",
             "collection": "activity_logs",
-            "title": "message from smoke-1778213939845",
-            "content": "smoke-1778213939845 info message: MCP sync smoke task12-smoke-1778213939845",
+            "title": "message from smoke-1778221053287",
+            "content": "smoke-1778221053287 info message: MCP sync smoke task12-smoke-1778221053287",
             "timestamp": "",
             "metadata": {
               "smoke": true,
               "task": 12,
               "collection": "activity_logs",
-              "sqlite_id": "43dc3ab1-bdc8-4801-9674-1022ad57bf42",
+              "sqlite_id": "34a40ed7-c54a-415c-b30e-2de44c18f103",
               "source_table": "activity_logs",
               "type": "message",
               "level": "info",
-              "agent_id": "smoke-1778213939845",
+              "agent_id": "smoke-1778221053287",
               "task_id": null,
-              "source": "smoke-1778213939845"
+              "source": "smoke-1778221053287"
             }
           },
           {
-            "id": "c2f34cb1-9658-4564-9c5e-d51c90b95c76",
+            "id": "f0fcaee1-31ea-427b-96a6-4d39217d56d9",
             "collection": "activity_logs",
-            "title": "message from smoke-1778213939845",
-            "content": "smoke info message: Smoke test activity task12-smoke-1778213939845",
+            "title": "message from smoke-1778221053287",
+            "content": "smoke info message: Smoke test activity task12-smoke-1778221053287",
             "timestamp": "",
             "metadata": {
               "smoke": true,
               "task": 12,
-              "sqlite_id": "c2f34cb1-9658-4564-9c5e-d51c90b95c76",
+              "sqlite_id": "f0fcaee1-31ea-427b-96a6-4d39217d56d9",
               "source_table": "activity_logs",
               "type": "message",
               "level": "info",
-              "agent_id": "smoke-1778213939845",
-              "task_id": "3fd5ed42-2211-4b5d-91b6-98e81914071b",
+              "agent_id": "smoke-1778221053287",
+              "task_id": "e5451e24-2798-4a93-98af-992ca565bb14",
               "source": "smoke"
             }
           }
@@ -93,10 +93,10 @@
       "update": {
         "ok": true,
         "task": {
-          "task_id": "3fd5ed42-2211-4b5d-91b6-98e81914071b",
-          "assigned_to": "smoke-1778213939845",
+          "task_id": "e5451e24-2798-4a93-98af-992ca565bb14",
+          "assigned_to": "smoke-1778221053287",
           "status": "completed",
-          "updated_at": "2026-05-08T04:19:00.404Z"
+          "updated_at": "2026-05-08T06:17:33.863Z"
         }
       }
     },
@@ -107,7 +107,7 @@
     "sleep": {
       "ok": true,
       "message": "Created 2 sleep summaries.",
-      "consideredActivities": 15,
+      "consideredActivities": 8,
       "eligibleActivities": 3,
       "createdSummaries": 2,
       "skippedSummaries": 0,

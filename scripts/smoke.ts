@@ -10,7 +10,7 @@ import { createApp } from "../src/server/app";
 
 type JsonRecord = Record<string, unknown>;
 
-const baseUrl = Bun.env.STELLA_URL ?? "http://127.0.0.1:3000";
+const baseUrl = Bun.env.STELLA_URL ?? "http://127.0.0.1:3003";
 const shouldStartServer = Bun.env.SMOKE_START_SERVER === "1";
 const smokeSqlitePath = Bun.env.SQLITE_PATH ?? "./data/smoke.sqlite";
 const evidenceDirectory = ".sisyphus/evidence";
@@ -383,7 +383,7 @@ try {
       env: {
         ...Bun.env,
         HOST: "127.0.0.1",
-        PORT: "3000",
+        PORT: "3003",
         SQLITE_PATH: smokeSqlitePath,
         CHROMA_HOST: Bun.env.CHROMA_HOST ?? "127.0.0.1",
         CHROMA_PORT: Bun.env.CHROMA_PORT ?? "65534",
