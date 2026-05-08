@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  scaffold:
+  verify:
     runs-on: ubuntu-latest
     env:
       HOST: 127.0.0.1
@@ -26,3 +26,5 @@ jobs:
         run: bun run typecheck
       - name: Test
         run: bun test
+      - name: Validate Docker Compose
+        run: docker compose config

@@ -57,3 +57,9 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Existing embedding_jobs schema uses knowledge_item_id/activity_log_id, collection, attempts, and last_error; worker maps pending -> processing -> completed/failed and increments attempts on failure.
 - Unit tests should inject a narrow ChromaGateway mock so Chroma is never required for bun test; degraded search falls back to SQLite LIKE over knowledge_items and activity_logs.
 - Task completed at 2026-05-08T03:34:06.2096668Z with chromadb installed via bun add and docker-compose chroma persistence at /chroma/chroma.
+
+## Task 11 - Local Docker Compose, CI, and Operational Hardening
+- Added local-only Docker hardening: Stella uses the official oven/bun image, binds host ports to 127.0.0.1, runs with LLM_PROVIDER=mock, persists SQLite under a named stella-data volume, and depends on Chroma health rather than remote provider keys.
+- Chroma remains derived/persistent via the chroma-data volume at /chroma/chroma with a heartbeat health check; production deployment concerns such as TLS, reverse proxying, Kubernetes, and secrets management stayed out of scope.
+- CI now installs with bun install --frozen-lockfile, typechecks, runs bun test, and validates docker compose config; evidence stored at .sisyphus/evidence/task-11-compose-config.txt.
+- scripts/smoke.ts exercises /health, agent registration, activity creation, and filtered activity query against an already-running Stella or a self-started local server when SMOKE_START_SERVER=1.
