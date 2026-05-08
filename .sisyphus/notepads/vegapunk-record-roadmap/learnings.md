@@ -57,3 +57,8 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Existing embedding_jobs schema uses knowledge_item_id/activity_log_id, collection, attempts, and last_error; worker maps pending -> processing -> completed/failed and increments attempts on failure.
 - Unit tests should inject a narrow ChromaGateway mock so Chroma is never required for bun test; degraded search falls back to SQLite LIKE over knowledge_items and activity_logs.
 - Task completed at 2026-05-08T03:34:06.2096668Z with chromadb installed via bun add and docker-compose chroma persistence at /chroma/chroma.
+
+## Task 8 - Satellite MVP Scripts for Lilith and Shaka
+- Added shared satellite config/client exports in `src/satellite/`; the client accepts `STELLA_URL` (default `http://127.0.0.1:3000`), registers agents, posts activity, patches task status, wraps connection refusal as a controlled error, and supports optional mocked or Streamable HTTP MCP tool calls.
+- Added bounded `--once` scripts for `scripts/satellites/lilith.ts` and `scripts/satellites/shaka.ts`; they perform one registration/activity cycle only and do not implement autonomous planning, negotiation, marketplace, or long-running loops.
+- Offline tests in `test/satellites/` mock Stella HTTP and MCP transport so `bun test test/satellites/` does not require a running server.

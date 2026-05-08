@@ -1,0 +1,4 @@
+﻿Task 8 Shaka offline evidence
+- Added scripts/satellites/shaka.ts with --once bounded execution via shared satellite client.
+- Shaka uses mocked/injectable Stella and MCP boundaries through src/satellite/client.ts for offline tests.
+- package.json exposes satellite:shaka as bun run scripts/satellites/shaka.ts --once.
