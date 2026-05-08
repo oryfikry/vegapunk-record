@@ -1,4 +1,4 @@
-import { CliproxyProvider, GeminiProvider, MockProvider, OllamaProvider, OpenAIProvider, OpenRouterProvider } from "./providers";
+import { CustomProvider, GeminiProvider, MockProvider, OllamaProvider, OpenAIProvider, OpenRouterProvider } from "./providers";
 import { createLLMError, type LLMProvider, type LLMProviderName, type LLMRequest, type LLMResponse } from "./types";
 
 export type LLMRouterConfig = {
@@ -8,7 +8,7 @@ export type LLMRouterConfig = {
 };
 
 function isProviderName(value: string | undefined): value is LLMProviderName {
-  return value === "mock" || value === "openrouter" || value === "openai" || value === "gemini" || value === "ollama" || value === "cliproxy";
+  return value === "mock" || value === "openrouter" || value === "openai" || value === "gemini" || value === "ollama" || value === "custom";
 }
 
 function configuredProvider(value: LLMProviderName | undefined): LLMProviderName {
@@ -21,7 +21,7 @@ function configuredProvider(value: LLMProviderName | undefined): LLMProviderName
 }
 
 export function createDefaultProviders(): LLMProvider[] {
-  return [new MockProvider(), new OpenRouterProvider(), new OpenAIProvider(), new GeminiProvider(), new OllamaProvider(), new CliproxyProvider()];
+  return [new MockProvider(), new OpenRouterProvider(), new OpenAIProvider(), new GeminiProvider(), new OllamaProvider(), new CustomProvider()];
 }
 
 export class LLMRouter {

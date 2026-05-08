@@ -32,17 +32,17 @@ async function readError(response: Response, key: string): Promise<string> {
   return redact(`HTTP ${response.status} ${response.statusText}${body ? `: ${body}` : ""}`, key);
 }
 
-export class CliproxyProvider implements LLMProvider {
-  readonly name = "cliproxy";
+export class CustomProvider implements LLMProvider {
+  readonly name = "custom";
   private readonly apiKey: string;
   private readonly baseUrl: string;
   private readonly model: string;
   private readonly timeoutMs: number;
 
   constructor(options: { apiKey?: string; baseUrl?: string; model?: string; timeoutMs?: number } = {}) {
-    this.apiKey = options.apiKey ?? Bun.env.CLIPROXY_API_KEY ?? "";
-    this.baseUrl = trimTrailingSlash(options.baseUrl ?? Bun.env.CLIPROXY_BASE_URL ?? "");
-    this.model = options.model ?? Bun.env.CLIPROXY_MODEL ?? "cliproxy/default";
+    this.apiKey = options.apiKey ?? Bun.env.CUSTOM_LLM_API_KEY ?? "";
+    this.baseUrl = trimTrailingSlash(options.baseUrl ?? Bun.env.CUSTOM_LLM_BASE_URL ?? "");
+    this.model = options.model ?? Bun.env.CUSTOM_LLM_MODEL ?? "custom/default";
     this.timeoutMs = options.timeoutMs ?? 30_000;
   }
 
@@ -52,11 +52,11 @@ export class CliproxyProvider implements LLMProvider {
 
   async complete(request: LLMRequest): Promise<LLMResponse> {
     if (!this.baseUrl.trim()) {
-      throw createLLMError(this.name, "CLIPROXY_BASE_URL is missing", false);
+      throw createLLMError(this.name, "CUSTOM_LLM_BASE_URL is missing", false);
     }
 
     if (!this.apiKey.trim()) {
-      throw createLLMError(this.name, "CLIPROXY_API_KEY is missing", false);
+      throw createLLMError(this.name, "CUSTOM_LLM_API_KEY is missing", false);
     }
 
     const controller = new AbortController();
@@ -86,7 +86,7 @@ export class CliproxyProvider implements LLMProvider {
       const content = data.choices?.[0]?.message?.content;
 
       if (!content) {
-        throw createLLMError(this.name, "Cliproxy response did not include message content", true);
+        throw createLLMError(this.name, "Custom LLM response did not include message content", true);
       }
 
       return {

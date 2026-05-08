@@ -32,7 +32,7 @@ export interface LLMProvider {
   isAvailable(): Promise<boolean>;
 }
 
-export type LLMProviderName = "mock" | "openrouter" | "openai" | "gemini" | "ollama" | "cliproxy";
+export type LLMProviderName = "mock" | "openrouter" | "openai" | "gemini" | "ollama" | "custom";
 
 export function createLLMError(provider: string, error: string, retryable: boolean): LLMError {
   return { provider, error, retryable };
