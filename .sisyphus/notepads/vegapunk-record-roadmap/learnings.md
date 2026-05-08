@@ -18,3 +18,10 @@
 - Config loading in `src/config/loader.ts` follows env vars > SQLite `configs` rows > safe defaults, keeps `127.0.0.1:3000` as the default bind, and does not require Chroma or LLM availability for health.
 - Safe logging and redaction live in `src/security/redact.ts`, masking API-key prefixes, Bearer tokens, Cookie headers, SSH private key headers, env-style secrets, and secret-like structured log fields.
 - Verification passed: `lsp_diagnostics` on modified server/config/security/root/test files had 0 diagnostics, `bun test test/server/` reported 5 pass/0 fail, and `bun run typecheck` exited 0. Evidence: `.sisyphus/evidence/task-3-health.json` and `.sisyphus/evidence/task-3-redaction.txt`.
+
+## Task 9 - LLM Router with Mock and Provider Adapters
+- Added `src/llm/types.ts` with the canonical `LLMRequest`, `LLMResponse`, `LLMError`, and `LLMProvider` interface, plus provider-name typing for `mock`, `openrouter`, `openai`, `gemini`, and `ollama`.
+- Implemented provider adapters behind one interface: `MockProvider` is deterministic and always available; OpenRouter/OpenAI/Gemini are env-gated and throw non-retryable `LLMError` objects when keys are missing; Ollama checks `/api/tags` with a 5s readiness timeout by default.
+- `LLMRouter` reads `LLM_PROVIDER` when no provider is passed, defaults safely to `mock`, dispatches through `route(request)`, exposes `getProvider(name)`, and only falls back when `fallbackProvider` is explicitly configured.
+- Tests avoid real API keys and real remote calls by injecting empty keys and an unreachable local Ollama URL; `bun test test/llm/` reported 7 pass/0 fail.
+- Verification passed: `lsp_diagnostics` on `src/llm` and `test/llm` had 0 diagnostics, `bun test test/llm/` exited 0, and `bun run typecheck` exited 0. Evidence: `.sisyphus/evidence/task-9-llm-mock.txt` and `.sisyphus/evidence/task-9-llm-missing-keys.txt`.

@@ -1,0 +1,33 @@
+Task 9 LLM mock/router verification
+
+Implemented files:
+- src/llm/types.ts
+- src/llm/router.ts
+- src/llm/providers/mock.ts
+- src/llm/providers/openrouter.ts
+- src/llm/providers/openai.ts
+- src/llm/providers/gemini.ts
+- src/llm/providers/ollama.ts
+- src/llm/providers/index.ts
+- src/llm/index.ts
+- test/llm/router.test.ts
+- test/llm/mock-provider.test.ts
+
+Command: bun test test/llm/
+Result: exit 0
+Output:
+bun test v1.2.21 (7c45ed97)
+
+ 7 pass
+ 0 fail
+ 21 expect() calls
+Ran 7 tests across 2 files.
+
+Command: bun run typecheck
+Result: exit 0
+Output:
+$ tsc --noEmit
+
+Notes:
+- MockProvider is always available and deterministic for identical LLMRequest inputs.
+- Router dispatches to the configured provider and only uses fallback when fallbackProvider is explicitly configured.
