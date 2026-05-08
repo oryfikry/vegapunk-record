@@ -1,0 +1,49 @@
+{
+  "ok": true,
+  "mode": "degraded",
+  "startedAt": "2026-05-08T04:06:27.778Z",
+  "completedAt": "2026-05-08T04:06:27.812Z",
+  "baseUrl": "http://127.0.0.1:61259",
+  "searchTerm": "task12-degraded-1778213187778",
+  "checks": {
+    "ingestion": {
+      "agent": {
+        "id": "degraded-1778213187792",
+        "name": "Degraded Smoke Agent",
+        "role": "smoke-test",
+        "status": "active",
+        "custom_llm": null,
+        "created_at": "2026-05-08T04:06:27.803Z",
+        "updated_at": "2026-05-08T04:06:27.803Z"
+      },
+      "activity": {
+        "id": "876c86ff-e193-4ed1-9344-beebba8c5615",
+        "timestamp": "2026-05-08T04:06:27.809Z",
+        "agent_id": "degraded-1778213187792",
+        "task_id": null,
+        "type": "message",
+        "level": "info",
+        "source": "smoke-degraded",
+        "message": "Degraded ingestion smoke task12-degraded-1778213187778",
+        "metadata_json": "{\"degraded\":true,\"task\":12}",
+        "redacted": 0,
+        "created_at": "2026-05-08T04:06:27.809Z"
+      }
+    },
+    "chromaUnavailable": true,
+    "knowledgeSearch": {
+      "degraded": true,
+      "resultCount": 1
+    },
+    "mockLlm": {
+      "provider": "mock",
+      "model": "mock-model",
+      "contentPreview": "mock:4d9b07c3:mock degraded smoke task12-degraded-177821318777"
+    },
+    "missingRemoteKey": {
+      "provider": "openrouter",
+      "error": "OPENROUTER_API_KEY is missing",
+      "retryable": false
+    }
+  }
+}

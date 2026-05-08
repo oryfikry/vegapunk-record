@@ -57,7 +57,6 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Unit tests should inject a narrow ChromaGateway mock so Chroma is never required for bun test; degraded search falls back to SQLite LIKE over knowledge_items and activity_logs.
 - Task completed at 2026-05-08T03:34:06.2096668Z with chromadb installed via bun add and docker-compose chroma persistence at /chroma/chroma.
 
-<<<<<<< HEAD
 ## Task 8 - Satellite MVP Scripts for Lilith and Shaka
 - Added shared satellite config/client exports in `src/satellite/`; the client accepts `STELLA_URL` (default `http://127.0.0.1:3000`), registers agents, posts activity, patches task status, wraps connection refusal as a controlled error, and supports optional mocked or Streamable HTTP MCP tool calls.
 - Added bounded `--once` scripts for `scripts/satellites/lilith.ts` and `scripts/satellites/shaka.ts`; they perform one registration/activity cycle only and do not implement autonomous planning, negotiation, marketplace, or long-running loops.
@@ -74,3 +73,10 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Chroma remains derived/persistent via the chroma-data volume at /chroma/chroma with a heartbeat health check; production deployment concerns such as TLS, reverse proxying, Kubernetes, and secrets management stayed out of scope.
 - CI now installs with bun install --frozen-lockfile, typechecks, runs bun test, and validates docker compose config; evidence stored at .sisyphus/evidence/task-11-compose-config.txt.
 - scripts/smoke.ts exercises /health, agent registration, activity creation, and filtered activity query against an already-running Stella or a self-started local server when SMOKE_START_SERVER=1.
+
+## Task 12 - End-to-End MVP Smoke, Documentation, and Evidence Bundle
+- Added `/api/knowledge/search` as a mounted Stella route over `src/search/search.ts`; default behavior still treats Chroma as derived and returns SQLite fallback results with `degraded: true` when Chroma is unavailable.
+- Expanded `scripts/smoke.ts` into a full vertical slice: health, agent registration, task/activity ingestion, MCP `sync_to_records`/`query_records`/`update_task_status`, knowledge search, sleep routine invocation, and evidence writes.
+- Added standalone degraded smoke via `scripts/smoke-degraded.ts` and `bun run smoke:degraded`; it verifies ingestion without Chroma, search `degraded: true`, deterministic mock LLM, and controlled missing OpenRouter key errors.
+- Replaced placeholder README with local setup, env vars, commands, architecture, degraded modes, and v1 non-goals. No git commit was created.
+- Verification passed: LSP diagnostics on modified TypeScript files had 0 diagnostics, `bun run typecheck` exited 0, `bun test` reported 57 pass/0 fail/225 assertions, `SMOKE_START_SERVER=1 bun run smoke` exited 0, `bun run smoke:degraded` exited 0, and `docker compose config` exited 0. Evidence: `.sisyphus/evidence/task-12-full-smoke.json` and `.sisyphus/evidence/task-12-degraded.json`.

@@ -475,7 +475,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(search): add chroma derived indexing` | Files: `src/chroma/**`, `src/indexing/**`, `docker-compose.yml`, `test/chroma/**`
 
-- [ ] 8. Implement Satellite MVP Scripts for Lilith and Shaka
+- [x] 8. Implement Satellite MVP Scripts for Lilith and Shaka
 
   **What to do**: Create shared Satellite client helper plus `scripts/satellites/lilith.ts` and `scripts/satellites/shaka.ts`. Each script loads config, registers/updates status with Stella, performs one bounded loop or polling cycle, sends activity logs, can update assigned task status, and can call MCP tools. Add offline tests with mock Stella/MCP transport.
   **Must NOT do**: Do not build autonomous long-running planning, multi-agent negotiation, marketplace, or self-modifying memory behavior.
@@ -555,7 +555,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(llm): add provider router and mock adapter` | Files: `src/llm/**`, `test/llm/**`
 
-- [ ] 10. Build Nightly Sleep Routine as Bounded Script
+- [x] 10. Build Nightly Sleep Routine as Bounded Script
 
   **What to do**: Implement `bun run sleep` script that reads eligible activity logs, creates deterministic summaries with mock LLM in test mode, writes `knowledge_items` in `core_knowledge`, queues Chroma index jobs, and optionally flushes only ephemeral derived memory. Make reruns idempotent enough to avoid duplicate summaries for the same source window.
   **Must NOT do**: Do not delete canonical `activity_logs`; do not require real LLM keys; do not implement a full scheduler/orchestrator unless trivial wrapper only.
@@ -594,7 +594,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `feat(memory): add bounded sleep routine` | Files: `scripts/sleep.ts`, `src/memory/**`, `test/sleep/**`
 
-- [ ] 11. Add Local Docker Compose, CI, and Operational Hardening
+- [x] 11. Add Local Docker Compose, CI, and Operational Hardening
 
   **What to do**: Finalize local `Dockerfile`, `docker-compose.yml` for Stella + Chroma, `.dockerignore`, Chroma persistent volume, health checks, CI workflow running install/typecheck/test and `docker compose config`, and scripts for smoke testing. Ensure default bind remains localhost and production deployment is explicitly out of scope.
   **Must NOT do**: Do not add Kubernetes, cloud provisioning, TLS, production reverse proxy, or secrets manager integration.
@@ -634,7 +634,7 @@ Create a local-first Stella server that receives agent activity, persists it dur
 
   **Commit**: YES | Message: `chore(infra): add local docker and ci checks` | Files: `Dockerfile`, `docker-compose.yml`, `.dockerignore`, `.github/workflows/ci.yml`, `scripts/smoke.ts`
 
-- [ ] 12. End-to-End MVP Smoke, Documentation, and Evidence Bundle
+- [x] 12. End-to-End MVP Smoke, Documentation, and Evidence Bundle
 
   **What to do**: Add README or local runbook, complete scripted smoke flow, and generate evidence for the full vertical slice: start Stella, register Satellite, ingest activity, view dashboard, call MCP tools, index/search knowledge, run sleep, and verify degraded Chroma/LLM behavior. This task stitches prior outputs and fixes integration gaps only.
   **Must NOT do**: Do not introduce new product scope; do not add manual-only verification; do not mark final verification complete without user approval after review agents report.

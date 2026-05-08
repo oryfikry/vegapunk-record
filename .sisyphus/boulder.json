@@ -57,6 +57,15 @@
       "agent": "Sisyphus-Junior",
       "category": "unspecified-low",
       "updated_at": "2026-05-08T03:53:50.050Z"
+    },
+    "todo:12": {
+      "task_key": "todo:12",
+      "task_label": "12",
+      "task_title": "End-to-End MVP Smoke, Documentation, and Evidence Bundle",
+      "session_id": "ses_1fa41c0deffeUVjKsNKJKHk4UJ",
+      "agent": "Sisyphus-Junior",
+      "category": "unspecified-high",
+      "updated_at": "2026-05-08T04:05:16.728Z"
     }
   }
 }

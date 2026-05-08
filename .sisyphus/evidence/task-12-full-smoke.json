@@ -1,0 +1,108 @@
+{
+  "ok": true,
+  "mode": "full",
+  "startedAt": "2026-05-08T04:06:27.182Z",
+  "completedAt": "2026-05-08T04:06:27.775Z",
+  "baseUrl": "http://127.0.0.1:3000",
+  "sqlitePath": "./data/smoke.sqlite",
+  "searchTerm": "task12-smoke-1778213187182",
+  "checks": {
+    "health": {
+      "ok": true,
+      "service": "stella"
+    },
+    "agent": {
+      "id": "smoke-1778213187182",
+      "name": "Smoke Test Agent",
+      "role": "smoke-test",
+      "status": "active",
+      "custom_llm": null,
+      "created_at": "2026-05-08T04:06:27.701Z",
+      "updated_at": "2026-05-08T04:06:27.701Z"
+    },
+    "task": {
+      "task_id": "b749d756-4bbe-4439-8310-58d637812fdf",
+      "assigned_to": "smoke-1778213187182",
+      "status": "pending",
+      "description": "Task 12 smoke task task12-smoke-1778213187182",
+      "created_at": "2026-05-08T04:06:27.706Z",
+      "updated_at": "2026-05-08T04:06:27.706Z"
+    },
+    "activity": {
+      "id": "9334a910-f16d-4197-8b94-318cba9acc90",
+      "timestamp": "2026-05-08T04:06:27.708Z",
+      "agent_id": "smoke-1778213187182",
+      "task_id": "b749d756-4bbe-4439-8310-58d637812fdf",
+      "type": "message",
+      "level": "info",
+      "source": "smoke",
+      "message": "Smoke test activity task12-smoke-1778213187182",
+      "metadata_json": "{\"smoke\":true,\"task\":12}",
+      "redacted": 0,
+      "created_at": "2026-05-08T04:06:27.708Z"
+    },
+    "activityQueryCount": 1,
+    "mcp": {
+      "sync": {
+        "ok": true,
+        "activity": {
+          "id": "d0259591-3624-4c86-ad0d-a290554e3a6d",
+          "timestamp": "2026-05-08T04:06:27.743Z",
+          "agent_id": "smoke-1778213187182",
+          "type": "message",
+          "message": "MCP sync smoke task12-smoke-1778213187182"
+        }
+      },
+      "query": {
+        "ok": true,
+        "degraded": true,
+        "results": [
+          {
+            "id": "d0259591-3624-4c86-ad0d-a290554e3a6d",
+            "collection": "activity_logs",
+            "title": "message from smoke-1778213187182",
+            "content": "MCP sync smoke task12-smoke-1778213187182",
+            "timestamp": "2026-05-08T04:06:27.743Z",
+            "metadata": {
+              "smoke": true,
+              "task": 12
+            }
+          },
+          {
+            "id": "9334a910-f16d-4197-8b94-318cba9acc90",
+            "collection": "activity_logs",
+            "title": "message from smoke-1778213187182",
+            "content": "Smoke test activity task12-smoke-1778213187182",
+            "timestamp": "2026-05-08T04:06:27.708Z",
+            "metadata": {
+              "smoke": true,
+              "task": 12
+            }
+          }
+        ]
+      },
+      "update": {
+        "ok": true,
+        "task": {
+          "task_id": "b749d756-4bbe-4439-8310-58d637812fdf",
+          "assigned_to": "smoke-1778213187182",
+          "status": "completed",
+          "updated_at": "2026-05-08T04:06:27.750Z"
+        }
+      }
+    },
+    "knowledgeSearch": {
+      "degraded": true,
+      "resultCount": 2
+    },
+    "sleep": {
+      "ok": true,
+      "message": "Created 2 sleep summaries.",
+      "consideredActivities": 9,
+      "eligibleActivities": 3,
+      "createdSummaries": 2,
+      "skippedSummaries": 0,
+      "flushedEphemeralItems": 0
+    }
+  }
+}
