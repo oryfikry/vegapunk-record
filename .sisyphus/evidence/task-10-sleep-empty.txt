@@ -1,0 +1,9 @@
+{
+  "ok": true,
+  "message": "No eligible activity logs to summarize.",
+  "consideredActivities": 0,
+  "eligibleActivities": 0,
+  "createdSummaries": [],
+  "skippedSummaries": 0,
+  "flushedEphemeralItems": 0
+}

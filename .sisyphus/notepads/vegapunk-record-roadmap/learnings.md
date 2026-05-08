@@ -57,3 +57,9 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 - Existing embedding_jobs schema uses knowledge_item_id/activity_log_id, collection, attempts, and last_error; worker maps pending -> processing -> completed/failed and increments attempts on failure.
 - Unit tests should inject a narrow ChromaGateway mock so Chroma is never required for bun test; degraded search falls back to SQLite LIKE over knowledge_items and activity_logs.
 - Task completed at 2026-05-08T03:34:06.2096668Z with chromadb installed via bun add and docker-compose chroma persistence at /chroma/chroma.
+
+## Task 10 - Nightly Sleep Routine
+- The current schema stores knowledge category as `knowledge_items.collection`; sleep summaries therefore use collection `core_knowledge` and optional flush deletes only derived `ephemeral_memory` knowledge rows plus their embedding jobs.
+- Sleep idempotency is metadata-based: summaries write `metadata.kind = "sleep_summary"` and exact `source_activity_ids`, and reruns filter those activity IDs before creating new summaries.
+- `scripts/sleep.ts` uses `createDatabase(SQLITE_PATH ?? "./data/punk-records.sqlite")`, relying on the DB facade to run migrations and seed agents; no scheduler, Chroma connection, or real LLM key is required.
+- Verification passed: LSP diagnostics on new sleep files had 0 diagnostics, `bun test test/sleep/` reported 4 pass/0 fail, `bun run typecheck` exited 0, and `bun run sleep` exited 0 on an empty DB. Evidence: `.sisyphus/evidence/task-10-sleep-empty.txt` and `.sisyphus/evidence/task-10-sleep-summary.json`.

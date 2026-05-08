@@ -1,0 +1,44 @@
+{
+  "ok": true,
+  "rerunIdempotent": true,
+  "activityLogCount": 2,
+  "knowledgeCount": 1,
+  "embeddingJobCount": 1,
+  "knowledge": [
+    {
+      "id": "0a116fa3-0ba4-4138-b46e-bc0e9392b3a0",
+      "collection": "core_knowledge",
+      "title": "Nightly sleep summary for stella (2026-05-08 to 2026-05-08)",
+      "content": "mock:00a2802d:Create a concise nightly sleep summary for Vegap",
+      "source_activity_ids": [
+        "evidence-activity-1",
+        "evidence-activity-2"
+      ],
+      "metadata": {
+        "kind": "sleep_summary",
+        "source_activity_ids": [
+          "evidence-activity-1",
+          "evidence-activity-2"
+        ],
+        "source_window_start": "2026-05-08T08:00:00.000Z",
+        "source_window_end": "2026-05-08T09:00:00.000Z",
+        "source_agent_id": "stella",
+        "summarizer_provider": "mock",
+        "summarizer_model": "sleep-summary-mockable",
+        "usage": {
+          "prompt_tokens": 12,
+          "completion_tokens": 24
+        }
+      }
+    }
+  ],
+  "pendingEmbeddingJobs": [
+    {
+      "id": "1b305b0e-2f9e-4199-898a-ea5745eae5f6",
+      "knowledge_item_id": "0a116fa3-0ba4-4138-b46e-bc0e9392b3a0",
+      "collection": "core_knowledge",
+      "status": "pending",
+      "attempts": 0
+    }
+  ]
+}
