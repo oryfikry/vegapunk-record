@@ -2,7 +2,11 @@
 
 **Your AI agent's memory, running anywhere you need it.**
 
-Vegapunk-Record is a local-first agent observation platform. Deploy Stella on your VPS, cloud server, or local machine—then connect your AI agents, MCP clients, or terminal from anywhere. Built with Bun, TypeScript, and SQLite for zero-config persistence.
+> *"In One Piece, Dr. Vegapunk's Punk Records is a massive brain-shaped archive floating above Egghead Island—storing all his knowledge, memories, and research. Every Satellite (his clones) syncs their experiences back to this central repository, creating a distributed intelligence network."*
+
+Vegapunk-Record brings that concept to your AI agents. Deploy **Stella** (your Punk Records server) on any machine, then connect your **Satellite agents** from anywhere. Every agent's activity, knowledge, and task history flows into one canonical SQLite database—your agents' shared memory.
+
+Built with Bun, TypeScript, and SQLite for zero-config persistence. No cloud vendor lock-in, no external dependencies for core functionality.
 
 ---
 
@@ -149,18 +153,31 @@ SMOKE_START_SERVER=1 bun run smoke
 
 ## 📦 What's Included
 
-- **Stella Server**: REST API + SSE activity stream + MCP endpoint
+- **Stella Server**: Your Punk Records—REST API + SSE activity stream + MCP endpoint
 - **Dashboard**: Real-time agent activity monitoring (Alpine.js + Tailwind)
-- **Punk Records**: SQLite database for agents, tasks, knowledge, activity logs
+- **Punk Records Database**: SQLite storage for agents, tasks, knowledge, activity logs
 - **ChromaDB Integration**: Optional vector search (rebuildable from SQLite)
-- **Satellite Clients**: Bounded agent scripts (Lilith, Shaka profiles)
+- **Satellite Clients**: Bounded agent scripts with distinct identities (Lilith, Shaka)
 - **Mock LLM Provider**: Deterministic responses for testing (no API keys needed)
 - **Docker Support**: One-command deployment with `docker compose`
+
+### The One Piece Analogy
+
+| One Piece Concept | Vegapunk-Record Equivalent |
+|---|---|
+| **Punk Records** (floating brain archive) | **Stella Server** (SQLite + ChromaDB) |
+| **Satellites** (Vegapunk's clones) | **Satellite Agents** (Lilith, Shaka scripts) |
+| **Knowledge Sync** (clones → brain) | **MCP Protocol** (`sync_to_records` tool) |
+| **Shared Memory** (all clones access same data) | **Canonical SQLite** (single source of truth) |
+| **Egghead Island** (physical location) | **Your VPS/Cloud/Local Machine** |
+
+Just like Vegapunk's Satellites operate independently but share knowledge through Punk Records, your AI agents can work autonomously while syncing their experiences to Stella.
 
 ---
 
 ## 🎯 Use Cases
 
+- **Distributed Agent Memory**: Like Punk Records, one canonical memory for all your agents
 - **Remote Agent Monitoring**: Deploy Stella on a VPS, monitor agents from anywhere
 - **Multi-Agent Coordination**: Central hub for distributed AI agents
 - **Local Development**: Full stack runs on localhost without external dependencies
