@@ -1,6 +1,7 @@
 import { Elysia, type Context } from "elysia";
 import type { ActivityLog, AgentStatus, VegapunkDatabase } from "../../db";
 import { agentStatuses } from "../../db";
+import { requireAuthToken } from "../auth-guard";
 import type { ActivityStream } from "./stream";
 
 type JsonRecord = Record<string, unknown>;
@@ -54,7 +55,12 @@ function emitAgentRegistration(db: VegapunkDatabase, stream: ActivityStream, age
 export function createAgentsRoutes(db: VegapunkDatabase, stream: ActivityStream) {
   return new Elysia({ prefix: "/api/agents" })
     .get("/", () => db.agents.list())
-    .post("/register", ({ body, set }) => {
+    .post("/register", ({ body, request, set }) => {
+      const authError = requireAuthToken(request, set);
+      if (authError) {
+        return authError;
+      }
+
       if (!isRecord(body)) {
         return jsonError(set, 400, "Request body must be a JSON object");
       }
@@ -90,7 +96,12 @@ export function createAgentsRoutes(db: VegapunkDatabase, stream: ActivityStream)
       set.status = 201;
       return agent;
     })
-    .patch("/:id/status", ({ body, params, set }) => {
+    .patch("/:id/status", ({ body, params, request, set }) => {
+      const authError = requireAuthToken(request, set);
+      if (authError) {
+        return authError;
+      }
+
       if (!isRecord(body)) {
         return jsonError(set, 400, "Request body must be a JSON object");
       }

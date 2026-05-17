@@ -7,7 +7,8 @@ RUN bun install --frozen-lockfile
 
 COPY . .
 
-ENV HOST=127.0.0.1 \
+ENV HOST=0.0.0.0 \
+    STELLA_ALLOW_PUBLIC_BIND=1 \
     PORT=3003 \
     SQLITE_PATH=/app/data/punk-records.sqlite \
     CHROMA_HOST=chroma \

@@ -1,5 +1,6 @@
 import { Elysia, type Context } from "elysia";
 import type { VegapunkDatabase } from "../../db";
+import { requireAuthToken } from "../auth-guard";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -36,7 +37,12 @@ export function createSetupRoutes(db: VegapunkDatabase) {
         requiresKey: name !== "ollama",
       })),
     }))
-    .post("/provider", ({ body, set }) => {
+    .post("/provider", ({ body, request, set }) => {
+      const authError = requireAuthToken(request, set);
+      if (authError) {
+        return authError;
+      }
+
       if (!isRecord(body)) {
         return jsonError(set, 400, "Request body must be a JSON object");
       }

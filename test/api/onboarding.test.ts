@@ -3,31 +3,31 @@ import { defaultConfig } from "../../src/config";
 import { createTemporaryDatabase, createTestApp, jsonRequest } from "./helpers";
 
 describe("onboarding API", () => {
-  test("reports passcode and setup status", async () => {
-    const originalPasscode = Bun.env.STELLA_PASSCODE;
-    Bun.env.STELLA_PASSCODE = "test-passcode";
+  test("reports auth token and setup status", async () => {
+    const originalAuthToken = Bun.env.STELLA_AUTH_TOKEN;
+    Bun.env.STELLA_AUTH_TOKEN = "test-token";
     const app = createTestApp();
 
     const response = await app.handle(new Request("http://localhost/api/auth/status"));
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ requiresPasscode: true, isSetup: false });
-    Bun.env.STELLA_PASSCODE = originalPasscode;
+    expect(await response.json()).toEqual({ requiresAuthToken: true, isSetup: false });
+    Bun.env.STELLA_AUTH_TOKEN = originalAuthToken;
   });
 
-  test("validates passcode without storing it client-side", async () => {
-    const originalPasscode = Bun.env.STELLA_PASSCODE;
-    Bun.env.STELLA_PASSCODE = "test-passcode";
+  test("validates auth token without storing it client-side", async () => {
+    const originalAuthToken = Bun.env.STELLA_AUTH_TOKEN;
+    Bun.env.STELLA_AUTH_TOKEN = "test-token";
     const app = createTestApp();
 
-    const rejected = await app.handle(jsonRequest("/api/auth/verify", "POST", { passcode: "wrong" }));
-    const accepted = await app.handle(jsonRequest("/api/auth/verify", "POST", { passcode: "test-passcode" }));
+    const rejected = await app.handle(jsonRequest("/api/auth/verify", "POST", { authToken: "wrong" }));
+    const accepted = await app.handle(jsonRequest("/api/auth/verify", "POST", { authToken: "test-token" }));
 
     expect(rejected.status).toBe(401);
-    expect(await rejected.json()).toEqual({ error: "Invalid passcode", status: 401 });
+    expect(await rejected.json()).toEqual({ error: "Invalid auth token", status: 401 });
     expect(accepted.status).toBe(200);
     expect(await accepted.json()).toEqual({ verified: true });
-    Bun.env.STELLA_PASSCODE = originalPasscode;
+    Bun.env.STELLA_AUTH_TOKEN = originalAuthToken;
   });
 
   test("lists setup providers and persists selected provider secrets", async () => {
@@ -65,6 +65,9 @@ describe("onboarding API", () => {
     const response = await app.handle(new Request("http://localhost/api/auth/status"));
 
     expect(response.status).toBe(200);
-    expect(await response.json()).toEqual({ requiresPasscode: Boolean(Bun.env.STELLA_PASSCODE), isSetup: true });
+    expect(await response.json()).toEqual({
+      requiresAuthToken: Boolean(Bun.env.STELLA_AUTH_TOKEN),
+      isSetup: true,
+    });
   });
 });

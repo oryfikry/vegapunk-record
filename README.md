@@ -16,7 +16,7 @@ Built with Bun, TypeScript, and SQLite for zero-config persistence. No cloud ven
 
 ```bash
 # Clone and enter the project
-git clone https://github.com/yourusername/vegapunk-record.git
+git clone https://github.com/oryfikry/vegapunk-record.git
 cd vegapunk-record
 
 # Install Bun if not already installed
@@ -29,8 +29,10 @@ bun install
 # Configure for remote access
 cp .env.example .env
 
-# Edit .env - set HOST to 0.0.0.0 for remote access
+# Edit .env - for direct remote binds, explicitly opt in and set an auth token
 # HOST=0.0.0.0
+# STELLA_ALLOW_PUBLIC_BIND=1
+# STELLA_AUTH_TOKEN=change-me
 # PORT=3003
 # LLM_PROVIDER=mock  # Safe default, no API keys needed
 
@@ -130,7 +132,9 @@ SMOKE_START_SERVER=1 bun run smoke
 
 | Variable | Default | Purpose |
 | --- | --- | --- |
-| `HOST` | `127.0.0.1` | Server bind address. Use `0.0.0.0` for remote access. |
+| `HOST` | `127.0.0.1` | Server bind address. Use `0.0.0.0` only behind a firewall or reverse proxy. |
+| `STELLA_ALLOW_PUBLIC_BIND` | `0` | Must be `1` before Stella will bind to `0.0.0.0`. |
+| `STELLA_AUTH_TOKEN` | blank | Optional auth token protecting setup/write endpoints. Send as `Authorization: Bearer <token>` or `X-Stella-Auth-Token`. |
 | `PORT` | `3003` | HTTP port. |
 | `SQLITE_PATH` | `./data/punk-records.sqlite` | Database location. |
 | `LLM_PROVIDER` | `mock` | LLM provider. Options: `mock`, `openai`, `openrouter`, `gemini`, `ollama`, `custom`. |
@@ -146,8 +150,9 @@ SMOKE_START_SERVER=1 bun run smoke
 - **Never commit `.env` files** - they contain secrets
 - **Never paste API keys into chat** - use environment variables
 - Default `HOST=127.0.0.1` is localhost-only for security
-- Use `HOST=0.0.0.0` only on trusted networks or behind a firewall
-- Consider using a reverse proxy (nginx/caddy) with TLS for production
+- Use `HOST=0.0.0.0` only on trusted networks or behind a firewall/reverse proxy, and set `STELLA_ALLOW_PUBLIC_BIND=1`
+- Set `STELLA_AUTH_TOKEN` before exposing Stella beyond localhost; write/setup endpoints require it when configured
+- Consider using a reverse proxy (nginx/caddy/traefik) with TLS for production
 
 ---
 

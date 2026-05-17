@@ -1,6 +1,7 @@
 import { Elysia, type Context } from "elysia";
 import type { ActivityLevel, ActivityType, VegapunkDatabase } from "../../db";
 import { activityLevels, activityTypes } from "../../db";
+import { requireAuthToken } from "../auth-guard";
 import type { ActivityStream } from "./stream";
 
 type JsonRecord = Record<string, unknown>;
@@ -41,7 +42,12 @@ function parseLimit(value: unknown): number {
 
 export function createActivityRoutes(db: VegapunkDatabase, stream: ActivityStream) {
   return new Elysia({ prefix: "/api/activity" })
-    .post("/", ({ body, set }) => {
+    .post("/", ({ body, request, set }) => {
+      const authError = requireAuthToken(request, set);
+      if (authError) {
+        return authError;
+      }
+
       if (!isRecord(body)) {
         return jsonError(set, 400, "Request body must be a JSON object");
       }

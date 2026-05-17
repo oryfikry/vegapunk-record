@@ -1,6 +1,7 @@
 import { Elysia, type Context } from "elysia";
 import type { TaskStatus, VegapunkDatabase } from "../../db";
 import { taskStatuses } from "../../db";
+import { requireAuthToken } from "../auth-guard";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -24,7 +25,12 @@ function jsonError(set: Context["set"], status: 400 | 404, error: string) {
 export function createTasksRoutes(db: VegapunkDatabase) {
   return new Elysia({ prefix: "/api/tasks" })
     .get("/", () => db.tasks.list())
-    .post("/", ({ body, set }) => {
+    .post("/", ({ body, request, set }) => {
+      const authError = requireAuthToken(request, set);
+      if (authError) {
+        return authError;
+      }
+
       if (!isRecord(body)) {
         return jsonError(set, 400, "Request body must be a JSON object");
       }
@@ -46,7 +52,12 @@ export function createTasksRoutes(db: VegapunkDatabase) {
       set.status = 201;
       return task;
     })
-    .patch("/:task_id/status", ({ body, params, set }) => {
+    .patch("/:task_id/status", ({ body, params, request, set }) => {
+      const authError = requireAuthToken(request, set);
+      if (authError) {
+        return authError;
+      }
+
       if (!isRecord(body)) {
         return jsonError(set, 400, "Request body must be a JSON object");
       }

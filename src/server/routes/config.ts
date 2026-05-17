@@ -1,6 +1,7 @@
 import { Elysia, type Context } from "elysia";
 import type { StellaConfig } from "../../config";
 import type { Config, VegapunkDatabase } from "../../db";
+import { requireAuthToken } from "../auth-guard";
 
 type JsonRecord = Record<string, unknown>;
 
@@ -55,7 +56,12 @@ export function createConfigRoutes(db: VegapunkDatabase, config: StellaConfig) {
       service: "stella" as const,
       llmProvider: getCachedLlmProvider(),
     }))
-    .patch("/", ({ body, set }) => {
+    .patch("/", ({ body, request, set }) => {
+      const authError = requireAuthToken(request, set);
+      if (authError) {
+        return authError;
+      }
+
       if (!isRecord(body)) {
         return jsonError(set, 400, "Request body must be a JSON object");
       }
