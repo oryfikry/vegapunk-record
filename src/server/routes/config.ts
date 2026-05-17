@@ -30,10 +30,30 @@ function configValueToString(value: unknown): string {
 }
 
 export function createConfigRoutes(db: VegapunkDatabase, config: StellaConfig) {
+  let cachedLlmProvider = config.llmProvider;
+  let cachedLlmProviderUpdatedAt: string | undefined;
+
+  const getCachedLlmProvider = () => {
+    const stored = db.configs.get("LLM_PROVIDER");
+
+    if (!stored) {
+      cachedLlmProvider = config.llmProvider;
+      cachedLlmProviderUpdatedAt = undefined;
+      return cachedLlmProvider;
+    }
+
+    if (stored.updated_at !== cachedLlmProviderUpdatedAt) {
+      cachedLlmProvider = stored.value;
+      cachedLlmProviderUpdatedAt = stored.updated_at;
+    }
+
+    return cachedLlmProvider;
+  };
+
   return new Elysia({ prefix: "/api/config" })
     .get("/", () => ({
       service: "stella" as const,
-      llmProvider: config.llmProvider,
+      llmProvider: getCachedLlmProvider(),
     }))
     .patch("/", ({ body, set }) => {
       if (!isRecord(body)) {
@@ -53,12 +73,19 @@ export function createConfigRoutes(db: VegapunkDatabase, config: StellaConfig) {
           return jsonError(set, 403, `Config key is secret and cannot be updated: ${key}`);
         }
 
-        updated.push(db.configs.set({
+        const updatedConfig = db.configs.set({
           key,
           value: configValueToString(value),
           type: existing.type,
           is_secret: false,
-        }));
+        });
+
+        if (key === "LLM_PROVIDER") {
+          cachedLlmProvider = updatedConfig.value;
+          cachedLlmProviderUpdatedAt = updatedConfig.updated_at;
+        }
+
+        updated.push(updatedConfig);
       }
 
       return { ok: true, config: updated.map(serializeConfig) };

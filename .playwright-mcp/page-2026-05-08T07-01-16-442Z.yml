@@ -1,0 +1,77 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - paragraph [ref=e6]: Vegapunk-Record / Stella Ops
+      - heading "Static dashboard for local-first agent command." [level=1] [ref=e7]
+      - paragraph [ref=e8]: A no-build Alpine.js and Tailwind CSS control surface for agents, Stella activity, live knowledge signals, and safe runtime settings.
+    - complementary [ref=e9]:
+      - generic [ref=e11]:
+        - paragraph [ref=e12]: System Pulse
+        - paragraph
+      - generic [ref=e14]:
+        - generic [ref=e15]:
+          - term [ref=e16]: Tasks
+          - definition
+        - generic [ref=e17]:
+          - term [ref=e18]: Logs
+          - definition
+        - generic [ref=e19]:
+          - term [ref=e20]: Mode
+          - definition
+      - button "Open Settings Modal" [ref=e21] [cursor=pointer]
+  - generic [ref=e22]:
+    - article [ref=e23]:
+      - generic [ref=e24]:
+        - generic [ref=e25]:
+          - paragraph [ref=e26]: Panel 01
+          - heading "Agent Control Panel" [level=2] [ref=e27]
+        - button "Refresh" [ref=e28] [cursor=pointer]
+      - generic [ref=e29]: "No agents are registered yet. The control panel will populate automatically when `/api/agents` returns Stella satellites."
+      - generic [ref=e31]:
+        - heading "Task Queue" [level=3] [ref=e33]
+        - paragraph [ref=e35]: No tasks are queued. Stella is idle and ready for the next local command.
+    - article [ref=e36]:
+      - generic [ref=e37]:
+        - generic [ref=e38]:
+          - paragraph [ref=e39]: Panel 02
+          - heading "Stella Interface" [level=2] [ref=e40]
+        - generic [ref=e41]: POST /api/activity
+      - generic [ref=e42]:
+        - generic [ref=e43]:
+          - text: Agent source
+          - combobox "Agent source" [ref=e44]
+        - generic [ref=e45]:
+          - text: Message
+          - textbox "Message" [ref=e46]:
+            - /placeholder: Ask Stella to record a local observation...
+        - generic [ref=e47]:
+          - paragraph
+          - button "Transmit Sending" [ref=e48] [cursor=pointer]
+      - generic [ref=e49]: Stella Interface is waiting for an agent source before posting activity.
+      - generic [ref=e50]:
+        - generic [ref=e51]:
+          - paragraph [ref=e52]: Service
+          - paragraph
+        - generic [ref=e53]:
+          - paragraph [ref=e54]: Provider
+          - paragraph
+  - generic [ref=e55]:
+    - generic [ref=e57]:
+      - paragraph [ref=e58]: Panel 03
+      - heading "Knowledge Stream" [level=2] [ref=e59]
+    - generic [ref=e63]: "No activity logs yet. The Knowledge Stream is connected to `/api/activity` and will listen to `/api/stream/activity` when the browser supports EventSource."
+  - generic [ref=e66]:
+    - generic [ref=e67]:
+      - paragraph [ref=e68]: Panel 04
+      - heading "Settings Modal" [level=2] [ref=e69]
+      - paragraph [ref=e70]: "Safe runtime values load from `/api/config`. Secret-like keys are filtered before display and never rendered in the modal."
+    - button "Review Config" [ref=e71] [cursor=pointer]
+  - dialog "Settings Modal" [ref=e72]:
+    - generic [ref=e73]:
+      - generic [ref=e74]:
+        - generic [ref=e75]:
+          - paragraph [ref=e76]: Safe Configuration
+          - heading "Settings Modal" [level=2] [ref=e77]
+        - button "Close" [ref=e78] [cursor=pointer]
+      - generic [ref=e79]: No safe config values are available yet.
+      - paragraph [ref=e81]: Filtered keys include secret, token, password, cookie, authorization, and API key patterns.

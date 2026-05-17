@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="color-scheme" content="dark">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:; base-uri 'none'; object-src 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.tailwindcss.com https://cdn.jsdelivr.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; connect-src 'self'; img-src 'self' data:; base-uri 'none'; object-src 'none'">
   <title>Stella Command Dashboard</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -15,15 +15,17 @@
       theme: {
         extend: {
           colors: {
-            ink: "rgb(var(--color-ink) / <alpha-value>)",
-            panel: "rgb(var(--color-panel) / <alpha-value>)",
-            panelStrong: "rgb(var(--color-panel-strong) / <alpha-value>)",
-            line: "rgb(var(--color-line) / <alpha-value>)",
-            mist: "rgb(var(--color-mist) / <alpha-value>)",
-            muted: "rgb(var(--color-muted) / <alpha-value>)",
-            signal: "rgb(var(--color-signal) / <alpha-value>)",
-            amber: "rgb(var(--color-amber) / <alpha-value>)",
-            danger: "rgb(var(--color-danger) / <alpha-value>)"
+            ink: "rgb(var(--color-ink-rgb) / <alpha-value>)",
+            panel: "rgb(var(--color-panel-rgb) / <alpha-value>)",
+            panelStrong: "rgb(var(--color-panel-strong-rgb) / <alpha-value>)",
+            line: "rgb(var(--color-line-rgb) / <alpha-value>)",
+            mist: "rgb(var(--color-mist-rgb) / <alpha-value>)",
+            muted: "rgb(var(--color-muted-rgb) / <alpha-value>)",
+            signal: "rgb(var(--color-signal-rgb) / <alpha-value>)",
+            amber: "rgb(var(--color-amber-rgb) / <alpha-value>)",
+            danger: "rgb(var(--color-danger-rgb) / <alpha-value>)",
+            highlight: "rgb(var(--color-highlight-rgb) / <alpha-value>)",
+            copper: "rgb(var(--color-copper-rgb) / <alpha-value>)"
           },
           fontFamily: {
             display: ["Fraunces", "Georgia", "serif"],
@@ -42,22 +44,25 @@
       }
     };
   </script>
-  <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+  <!-- Legacy Alpine source was https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js; the CSP build avoids string evaluation. -->
+  <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/csp@3.x.x/dist/cdn.min.js"></script>
   <style>
     :root {
-      --color-ink: 5 9 14;
-      --color-panel: 13 23 32;
-      --color-panel-strong: 20 35 48;
-      --color-line: 57 79 96;
-      --color-mist: 231 242 238;
-      --color-muted: 140 162 172;
-      --color-signal: 62 230 206;
-      --color-amber: 246 189 96;
-      --color-danger: 255 104 104;
+      --color-ink-rgb: 26 26 27;
+      --color-panel-rgb: 36 36 38;
+      --color-panel-strong-rgb: 46 46 49;
+      --color-line-rgb: 142 146 148;
+      --color-mist-rgb: 245 245 245;
+      --color-muted-rgb: 142 146 148;
+      --color-signal-rgb: 255 128 171;
+      --color-amber-rgb: 255 167 38;
+      --color-danger-rgb: 211 47 47;
+      --color-highlight-rgb: 255 235 59;
+      --color-copper-rgb: 184 115 51;
       --radius-panel: 1.5rem;
       --radius-soft: 1rem;
       --shadow-panel: 0 1.5rem 4rem rgb(0 0 0 / .35), inset 0 1px 0 rgb(255 255 255 / .06);
-      --shadow-glow: 0 0 3rem rgb(62 230 206 / .18);
+      --shadow-glow: 0 0 3rem rgb(var(--color-signal-rgb) / .24), 0 0 7rem rgb(var(--color-amber-rgb) / .11);
       --grid-size: 3.5rem;
     }
 
@@ -65,9 +70,10 @@
 
     body {
       background:
-        radial-gradient(circle at 12% 8%, rgb(var(--color-signal) / .14), transparent 28rem),
-        radial-gradient(circle at 82% 16%, rgb(var(--color-amber) / .12), transparent 26rem),
-        linear-gradient(135deg, rgb(5 9 14), rgb(9 18 25) 44%, rgb(3 6 10));
+        radial-gradient(circle at 10% 8%, rgb(var(--color-signal-rgb) / .22), transparent 28rem),
+        radial-gradient(circle at 84% 12%, rgb(var(--color-amber-rgb) / .18), transparent 26rem),
+        radial-gradient(circle at 48% 94%, rgb(var(--color-copper-rgb) / .18), transparent 30rem),
+        linear-gradient(135deg, rgb(var(--color-ink-rgb)), rgb(var(--color-panel-rgb)) 48%, rgb(var(--color-ink-rgb) / .78));
     }
 
     body::before {
@@ -84,11 +90,80 @@
     }
 
     .panel {
-      border: 1px solid rgb(var(--color-line) / .55);
+      border: 1px solid rgb(var(--color-line-rgb) / .45);
       border-radius: var(--radius-panel);
-      background: linear-gradient(145deg, rgb(var(--color-panel) / .92), rgb(var(--color-panel-strong) / .72));
+      background: linear-gradient(145deg, rgb(var(--color-panel-rgb) / .92), rgb(var(--color-panel-strong-rgb) / .74));
       box-shadow: var(--shadow-panel);
       backdrop-filter: blur(1.25rem);
+    }
+
+    .onboarding-shell {
+      height: 100vh;
+      display: grid;
+      place-items: center;
+      overflow-y: auto;
+      padding: 2rem 1.25rem;
+    }
+
+    .onboarding-card {
+      position: relative;
+      width: min(100%, 58rem);
+      min-height: min(100%, 28rem);
+      overflow: hidden;
+      border: 1px solid rgb(var(--color-line-rgb) / .4);
+      border-radius: calc(var(--radius-panel) * 1.25);
+      background:
+        linear-gradient(135deg, rgb(255 255 255 / .1), transparent 26%),
+        linear-gradient(145deg, rgb(var(--color-panel-rgb) / .86), rgb(var(--color-panel-strong-rgb) / .68));
+      box-shadow: 0 2rem 6rem rgb(0 0 0 / .46), inset 0 1px 0 rgb(255 255 255 / .1);
+      backdrop-filter: blur(1.5rem);
+    }
+
+    .onboarding-card::before {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto auto;
+      height: 24rem;
+      width: 24rem;
+      border-radius: 999px;
+      background: radial-gradient(circle, rgb(var(--color-signal-rgb) / .26), transparent 66%);
+      pointer-events: none;
+    }
+
+    .orbit-mark {
+      border: 1px solid rgb(var(--color-line-rgb) / .48);
+      background-color: rgb(var(--color-signal-rgb));
+      background:
+        radial-gradient(circle at 50% 50%, rgb(var(--color-highlight-rgb) / .95) 0 .18rem, transparent .22rem),
+        conic-gradient(from 140deg, rgb(var(--color-signal-rgb) / .85), rgb(var(--color-amber-rgb) / .88), rgb(var(--color-copper-rgb) / .85), rgb(var(--color-signal-rgb) / .85));
+      box-shadow: 0 0 2.5rem rgb(var(--color-signal-rgb) / .28);
+    }
+
+    .provider-card {
+      border: 1px solid rgb(var(--color-line-rgb) / .45);
+      border-radius: var(--radius-soft);
+      background: rgb(var(--color-ink-rgb) / .28);
+      transition: transform .2s ease, border-color .2s ease, background .2s ease, box-shadow .2s ease;
+      will-change: transform;
+    }
+
+    .provider-card:hover,
+    .provider-card.is-selected {
+      transform: translateY(-2px);
+      border-color: rgb(var(--color-signal-rgb) / .72);
+      background: rgb(var(--color-signal-rgb) / .1);
+      box-shadow: 0 1rem 2.5rem rgb(var(--color-signal-rgb) / .14);
+    }
+
+    .step-error {
+      animation: shake .42s cubic-bezier(.36, .07, .19, .97) both;
+    }
+
+    @keyframes shake {
+      10%, 90% { transform: translate3d(-1px, 0, 0); }
+      20%, 80% { transform: translate3d(2px, 0, 0); }
+      30%, 50%, 70% { transform: translate3d(-4px, 0, 0); }
+      40%, 60% { transform: translate3d(4px, 0, 0); }
     }
 
     .panel-title {
@@ -97,7 +172,7 @@
     }
 
     .eyebrow {
-      color: rgb(var(--color-signal));
+      color: rgb(var(--color-signal-rgb));
       font-family: "IBM Plex Mono", ui-monospace, monospace;
       font-size: .72rem;
       font-weight: 600;
@@ -106,40 +181,194 @@
     }
 
     .badge {
-      border: 1px solid rgb(var(--color-line) / .55);
+      border: 1px solid rgb(var(--color-line-rgb) / .55);
       border-radius: 999px;
-      background: rgb(var(--color-ink) / .42);
-      color: rgb(var(--color-mist));
+      background: rgb(var(--color-ink-rgb) / .42);
+      color: rgb(var(--color-mist-rgb));
       font-family: "IBM Plex Mono", ui-monospace, monospace;
       font-size: .72rem;
-      line-height: 1;
+      line-height: 1.2;
       padding: .45rem .65rem;
     }
 
-    .badge-signal { border-color: rgb(var(--color-signal) / .5); color: rgb(var(--color-signal)); }
-    .badge-amber { border-color: rgb(var(--color-amber) / .52); color: rgb(var(--color-amber)); }
-    .badge-danger { border-color: rgb(var(--color-danger) / .58); color: rgb(var(--color-danger)); }
+    .badge-signal { border-color: rgb(var(--color-signal-rgb) / .5); color: rgb(var(--color-signal-rgb)); }
+    .badge-amber { border-color: rgb(var(--color-amber-rgb) / .52); color: rgb(var(--color-amber-rgb)); }
+    .badge-danger { border-color: rgb(var(--color-danger-rgb) / .58); color: rgb(var(--color-danger-rgb)); }
 
     .empty-state {
-      border: 1px dashed rgb(var(--color-line) / .72);
+      border: 1px dashed rgb(var(--color-line-rgb) / .72);
       border-radius: var(--radius-soft);
-      background: rgb(var(--color-ink) / .25);
-      color: rgb(var(--color-muted));
+      background: rgb(var(--color-ink-rgb) / .25);
+      color: rgb(var(--color-muted-rgb));
       padding: 1rem;
     }
 
     .focus-ring:focus-visible {
-      outline: 2px solid rgb(var(--color-signal));
+      outline: 2px solid rgb(var(--color-signal-rgb));
       outline-offset: 3px;
     }
   </style>
 </head>
 <body class="min-h-screen overflow-x-hidden font-body text-mist antialiased">
+  <noscript>
+    <section class="onboarding-shell">
+      <div class="onboarding-card p-6 text-center sm:p-8 lg:p-10">
+        <div class="relative z-10 mx-auto max-w-2xl">
+          <p class="eyebrow">JavaScript Required</p>
+          <h1 class="panel-title mt-4 text-4xl text-mist sm:text-5xl">Stella needs browser scripting.</h1>
+          <p class="mt-5 text-base leading-7 text-muted">
+            Enable JavaScript to use the local command dashboard, then reload this page. Setup instructions are in the project README.
+          </p>
+          <a class="focus-ring mt-7 inline-flex rounded-full border border-signal/60 bg-signal/10 px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[.2em] text-signal transition hover:bg-signal/20" href="/public/README.md">
+            Open Public Docs
+          </a>
+        </div>
+      </div>
+    </section>
+  </noscript>
   <main
-    x-data="stellaDashboard()"
+    x-data="stellaApp()"
     x-init="init()"
-    class="relative mx-auto flex w-full max-w-7xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10"
+    class="relative mx-auto flex min-h-screen w-full max-w-7xl flex-col gap-8 px-5 py-8 sm:px-8 lg:px-10"
   >
+    <!-- Dashboard compatibility layer: stellaApp() composes the original stellaDashboard() state; legacy marker x-data="stellaDashboard()". -->
+    <section class="onboarding-shell" x-show="step !== 'dashboard'" x-cloak aria-live="polite">
+      <div class="onboarding-card p-6 sm:p-8 lg:p-10">
+        <div class="relative z-10 mx-auto max-w-4xl">
+          <div class="mb-8 flex flex-wrap items-center justify-between gap-4">
+            <div class="flex items-center gap-4">
+              <div class="orbit-mark h-12 w-12 rounded-full"></div>
+              <div>
+                <p class="eyebrow">Stella Onboarding</p>
+                <p class="mt-1 text-sm text-muted">Local-first command access with Punk Records color.</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="badge" :class="['passcode', 'setup', 'dashboard'].includes(step) ? 'badge-signal' : ''">01 Passcode</span>
+              <span class="badge" :class="['setup', 'dashboard'].includes(step) ? 'badge-amber' : ''">02 Provider</span>
+              <span class="badge" :class="step === 'dashboard' ? 'badge-signal' : ''">03 Dashboard</span>
+            </div>
+          </div>
+
+          <section x-show="step === 'loading'" x-transition.opacity.duration.300ms class="grid min-h-[28rem] place-items-center text-center">
+            <div>
+              <div class="mx-auto h-16 w-16 animate-spin rounded-full border border-line/40 border-t-signal"></div>
+              <p class="eyebrow mt-8">Checking Session</p>
+              <h1 class="panel-title mt-3 text-4xl text-mist sm:text-5xl">Tuning Stella's signal.</h1>
+              <p class="mx-auto mt-4 max-w-xl text-muted">Reading `/api/auth/status` before opening the command dashboard.</p>
+            </div>
+          </section>
+
+          <section x-show="step === 'passcode'" x-transition.opacity.duration.300ms x-transition.scale.origin.center class="mx-auto max-w-2xl" :class="authError ? 'step-error' : ''">
+            <p class="eyebrow">Secure Gate</p>
+            <h1 class="panel-title mt-4 text-5xl leading-none text-mist sm:text-6xl">Enter the command passcode.</h1>
+            <p class="mt-5 text-base leading-7 text-muted">This is session-only access. The passcode stays in Alpine state long enough to verify and is never stored in localStorage.</p>
+
+            <form class="mt-8 space-y-5" @submit.prevent="submitPasscode()">
+              <label class="block">
+                <span class="font-mono text-xs uppercase tracking-[.18em] text-muted">Passcode</span>
+                <input
+                  type="password"
+                  class="focus-ring mt-3 w-full rounded-panel border border-line/60 bg-ink/60 px-5 py-5 text-center font-mono text-3xl tracking-[.35em] text-mist shadow-inner placeholder:text-muted/40 sm:text-4xl"
+                  x-model="passcode"
+                  autocomplete="current-password"
+                  placeholder="••••••"
+                  :disabled="submitting.passcode"
+                >
+              </label>
+              <div class="rounded-soft border border-danger/60 bg-danger/10 px-4 py-3 text-sm text-danger" x-show="authError" x-transition.opacity>
+                <p x-text="authError"></p>
+                <button type="button" class="focus-ring mt-3 rounded-full border border-danger/60 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-[.18em] transition hover:bg-danger/10" @click="loadAuthStatus()" :disabled="submitting.passcode">
+                  Retry Auth Check
+                </button>
+              </div>
+              <button type="submit" class="focus-ring w-full rounded-full bg-signal px-6 py-4 font-mono text-sm font-semibold uppercase tracking-[.22em] text-ink transition hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-50" :disabled="submitting.passcode || passcode.trim().length === 0">
+                <span x-show="!submitting.passcode">Verify Passcode</span>
+                <span x-show="submitting.passcode">Verifying</span>
+              </button>
+            </form>
+          </section>
+
+          <section x-show="step === 'setup'" x-transition.opacity.duration.300ms x-transition.scale.origin.center class="mx-auto max-w-5xl" :class="setupError ? 'step-error' : ''">
+            <div class="grid gap-6 lg:grid-cols-[.85fr_1.15fr] lg:items-start">
+              <div>
+                <p class="eyebrow">LLM Provider</p>
+                <h1 class="panel-title mt-4 text-5xl leading-none text-mist sm:text-6xl">Choose Stella's voice.</h1>
+                <p class="mt-5 text-base leading-7 text-muted">Provider options are fetched from `/api/setup/providers`, then configured once before the dashboard opens.</p>
+                <button type="button" class="focus-ring mt-6 rounded-full border border-amber/60 bg-amber/10 px-5 py-3 font-mono text-xs font-semibold uppercase tracking-[.2em] text-amber transition hover:bg-amber/20" @click="loadProviders()" :disabled="loadingProviders">
+                  <span x-show="!loadingProviders">Refresh Providers</span>
+                  <span x-show="loadingProviders">Loading Providers</span>
+                </button>
+              </div>
+
+              <div class="space-y-5">
+                <div class="grid gap-3 sm:grid-cols-2">
+                  <template x-for="provider in providers" :key="provider.name">
+                    <button type="button" class="provider-card focus-ring p-4 text-left" :class="selectedProvider === provider.name ? 'is-selected' : ''" @click="selectProvider(provider)">
+                      <div class="flex items-center gap-3">
+                        <span class="grid h-11 w-11 place-items-center rounded-full border border-line/50 bg-panelStrong/70 text-xl" x-text="providerIcon(provider.name)"></span>
+                        <div>
+                          <p class="text-lg font-semibold text-mist" x-text="providerLabel(provider.name)"></p>
+                          <p class="mt-1 font-mono text-xs uppercase tracking-[.16em] text-muted" x-text="provider.requiresKey ? (provider.keyField || 'apiKey') : 'local endpoint'"></p>
+                        </div>
+                      </div>
+                    </button>
+                  </template>
+                </div>
+
+                <div class="empty-state" x-show="!loadingProviders && providers.length === 0">No providers were returned by `/api/setup/providers`.</div>
+
+                <form class="rounded-panel border border-line/45 bg-ink/30 p-5" x-show="selectedProvider" x-transition.opacity @submit.prevent="submitProviderSetup()">
+                  <div class="mb-5 flex flex-wrap items-center justify-between gap-3">
+                    <div>
+                      <p class="font-mono text-xs uppercase tracking-[.18em] text-muted">Selected provider</p>
+                      <p class="mt-1 text-2xl font-semibold text-mist" x-text="providerLabel(selectedProvider)"></p>
+                    </div>
+                    <span class="badge badge-signal" x-text="selectedProvider"></span>
+                  </div>
+
+                  <label class="block" x-show="selectedProvider !== 'ollama'">
+                    <span class="font-mono text-xs uppercase tracking-[.18em] text-muted" x-text="selectedProviderConfig?.keyField || 'API key'"></span>
+                    <input type="password" class="focus-ring mt-2 w-full rounded-soft border border-line/60 bg-ink/60 px-4 py-3 font-mono text-mist placeholder:text-muted/50" x-model="setupForm.apiKey" autocomplete="off" placeholder="Paste provider key">
+                  </label>
+
+                  <label class="mt-4 block" x-show="selectedProvider === 'ollama' || selectedProvider === 'custom'">
+                    <span class="font-mono text-xs uppercase tracking-[.18em] text-muted" x-text="selectedProvider === 'ollama' ? 'Base URL' : 'Base URL (optional)'"></span>
+                    <input type="url" class="focus-ring mt-2 w-full rounded-soft border border-line/60 bg-ink/60 px-4 py-3 font-mono text-mist placeholder:text-muted/50" x-model="setupForm.baseUrl" :placeholder="selectedProvider === 'ollama' ? 'http://127.0.0.1:11434' : 'https://your-openai-compatible-host/v1'">
+                  </label>
+
+                  <label class="mt-4 block">
+                    <span class="font-mono text-xs uppercase tracking-[.18em] text-muted">Model (optional)</span>
+                    <input type="text" class="focus-ring mt-2 w-full rounded-soft border border-line/60 bg-ink/60 px-4 py-3 font-mono text-mist placeholder:text-muted/50" x-model="setupForm.model" autocomplete="off" placeholder="Leave blank for provider default">
+                  </label>
+
+                  <div class="mt-4 rounded-soft border border-danger/60 bg-danger/10 px-4 py-3 text-sm text-danger" x-show="setupError" x-transition.opacity>
+                    <p x-text="setupError"></p>
+                    <button type="button" class="focus-ring mt-3 rounded-full border border-danger/60 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-[.18em] transition hover:bg-danger/10" @click="loadProviders()" :disabled="loadingProviders">
+                      Retry Provider Load
+                    </button>
+                  </div>
+
+                  <button type="submit" class="focus-ring mt-5 w-full rounded-full bg-signal px-6 py-4 font-mono text-sm font-semibold uppercase tracking-[.22em] text-ink transition hover:shadow-glow disabled:cursor-not-allowed disabled:opacity-50" :disabled="submitting.setup || !canSubmitProvider()">
+                    <span x-show="!submitting.setup">Save Provider + Open Dashboard</span>
+                    <span x-show="submitting.setup">Saving Provider</span>
+                  </button>
+                </form>
+
+                <div class="rounded-soft border border-danger/60 bg-danger/10 px-4 py-3 text-sm text-danger" x-show="setupError && !selectedProvider" x-transition.opacity>
+                  <p x-text="setupError"></p>
+                  <button type="button" class="focus-ring mt-3 rounded-full border border-danger/60 px-4 py-2 font-mono text-xs font-semibold uppercase tracking-[.18em] transition hover:bg-danger/10" @click="loadProviders()" :disabled="loadingProviders">
+                    Retry Provider Load
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </section>
+
+    <div x-show="step === 'dashboard'" x-transition.opacity.duration.500ms class="flex w-full flex-col gap-8" x-cloak>
     <header class="grid gap-6 lg:grid-cols-[1.15fr_.85fr] lg:items-end">
       <section class="panel relative overflow-hidden p-6 sm:p-8">
         <div class="absolute -right-16 -top-20 h-52 w-52 rounded-full bg-signal/15 blur-3xl"></div>
@@ -353,9 +582,197 @@
         <p class="mt-5 text-sm leading-6 text-muted">Filtered keys include secret, token, password, cookie, authorization, and API key patterns.</p>
       </section>
     </div>
+    </div>
   </main>
 
   <script>
+    window.stellaApp = function stellaApp() {
+      return {
+        // Base dashboard state is spread first; onboarding-specific fields below intentionally override duplicate keys.
+        ...stellaDashboard(),
+        step: "loading",
+        authStatus: { requiresPasscode: true, isSetup: false },
+        passcode: "",
+        passcodeVerified: false,
+        authError: "",
+        setupError: "",
+        providers: [],
+        selectedProvider: "",
+        selectedProviderConfig: null,
+        loadingProviders: false,
+        dashboardStarted: false,
+        submitting: { passcode: false, setup: false },
+        setupForm: { apiKey: "", baseUrl: "", model: "" },
+
+        async init() {
+          await this.loadAuthStatus();
+        },
+
+        async loadAuthStatus() {
+          this.step = "loading";
+          this.authError = "";
+          try {
+            const response = await fetch("/api/auth/status", { headers: { accept: "application/json" } });
+            if (!response.ok) {
+              throw new Error(`${response.status} ${response.statusText}`.trim());
+            }
+            this.authStatus = await response.json();
+            this.routeFromStatus();
+          } catch (error) {
+            this.authError = `Unable to check auth status: ${error instanceof Error ? error.message : "unknown error"}`;
+            this.step = "passcode";
+          }
+        },
+
+        routeFromStatus() {
+          if (this.authStatus.requiresPasscode && !this.passcodeVerified) {
+            this.step = "passcode";
+            return;
+          }
+
+          if (!this.authStatus.isSetup) {
+            this.step = "setup";
+            this.loadProviders();
+            return;
+          }
+
+          this.openDashboard();
+        },
+
+        async submitPasscode() {
+          if (!this.passcode.trim()) return;
+          this.submitting.passcode = true;
+          this.authError = "";
+          try {
+            const response = await fetch("/api/auth/verify", {
+              method: "POST",
+              headers: { "content-type": "application/json", accept: "application/json" },
+              body: JSON.stringify({ passcode: this.passcode })
+            });
+            if (!response.ok) {
+              throw new Error(response.status === 401 ? "Passcode was not accepted." : `${response.status} ${response.statusText}`.trim());
+            }
+            const result = await response.json();
+            if (!result.verified) {
+              throw new Error("Passcode was not accepted.");
+            }
+            this.passcodeVerified = true;
+            this.passcode = "";
+            if (this.authStatus.isSetup) {
+              this.openDashboard();
+            } else {
+              this.step = "setup";
+              await this.loadProviders();
+            }
+          } catch (error) {
+            this.authError = error instanceof Error ? error.message : "Passcode verification failed.";
+          } finally {
+            this.submitting.passcode = false;
+          }
+        },
+
+        async loadProviders() {
+          this.loadingProviders = true;
+          this.setupError = "";
+          try {
+            const response = await fetch("/api/setup/providers", { headers: { accept: "application/json" } });
+            if (!response.ok) {
+              throw new Error(`${response.status} ${response.statusText}`.trim());
+            }
+            const data = await response.json();
+            this.providers = Array.isArray(data.providers) ? data.providers : [];
+            if (!this.selectedProvider && this.providers[0]) {
+              this.selectProvider(this.providers[0]);
+            }
+          } catch (error) {
+            this.setupError = `Unable to load providers: ${error instanceof Error ? error.message : "unknown error"}`;
+            this.providers = [];
+          } finally {
+            this.loadingProviders = false;
+          }
+        },
+
+        selectProvider(provider) {
+          this.selectedProviderConfig = provider;
+          this.selectedProvider = provider?.name || "";
+          this.setupError = "";
+          this.setupForm = {
+            apiKey: "",
+            baseUrl: this.selectedProvider === "ollama" ? "http://127.0.0.1:11434" : "",
+            model: ""
+          };
+        },
+
+        canSubmitProvider() {
+          if (!this.selectedProvider) return false;
+          if (this.selectedProvider === "ollama") return this.setupForm.baseUrl.trim().length > 0;
+          if (this.selectedProviderConfig?.requiresKey === false) return true;
+          return this.setupForm.apiKey.trim().length > 0;
+        },
+
+        async submitProviderSetup() {
+          if (!this.canSubmitProvider()) return;
+          this.submitting.setup = true;
+          this.setupError = "";
+          try {
+            const payload = {
+              provider: this.selectedProvider,
+              apiKey: this.selectedProvider === "ollama" ? undefined : this.setupForm.apiKey.trim() || undefined,
+              baseUrl: this.setupForm.baseUrl.trim() || undefined,
+              model: this.setupForm.model.trim() || undefined
+            };
+            const response = await fetch("/api/setup/provider", {
+              method: "POST",
+              headers: { "content-type": "application/json", accept: "application/json" },
+              body: JSON.stringify(payload)
+            });
+            if (!response.ok) {
+              throw new Error(`${response.status} ${response.statusText}`.trim());
+            }
+            const result = await response.json();
+            if (!result.ok && !result.configured) {
+              throw new Error("Provider setup was not accepted.");
+            }
+            this.authStatus.isSetup = true;
+            this.setupForm = { apiKey: "", baseUrl: "", model: "" };
+            this.openDashboard();
+          } catch (error) {
+            this.setupError = error instanceof Error ? error.message : "Provider setup failed.";
+          } finally {
+            this.submitting.setup = false;
+          }
+        },
+
+        async openDashboard() {
+          this.step = "dashboard";
+          if (!this.dashboardStarted) {
+            this.dashboardStarted = true;
+            await this.initDashboard();
+          }
+        },
+
+        providerLabel(name) {
+          return {
+            openai: "OpenAI",
+            openrouter: "OpenRouter",
+            gemini: "Gemini",
+            ollama: "Ollama",
+            custom: "Custom"
+          }[name] || String(name || "Provider");
+        },
+
+        providerIcon(name) {
+          return {
+            openai: "◌",
+            openrouter: "◇",
+            gemini: "✦",
+            ollama: "⬡",
+            custom: "⌁"
+          }[name] || "✺";
+        }
+      };
+    };
+
     function stellaDashboard() {
       const secretPattern = /(secret|token|password|cookie|authorization|api[_-]?key|private[_-]?key)/i;
 
@@ -368,12 +785,14 @@
         messageText: "",
         stellaStatus: "Ready to write a redacted activity log.",
         streamStatus: "connecting",
+        activityEvents: null,
+        activityStreamCleanupController: null,
         settingsOpen: false,
         sending: false,
         loading: { agents: true, tasks: true, activity: true, config: true },
         errors: { agents: "", tasks: "", activity: "", config: "" },
 
-        async init() {
+        async initDashboard() {
           await Promise.all([this.loadAgents(), this.loadTasks(), this.loadActivity(), this.loadConfig()]);
           this.connectActivityStream();
         },
@@ -423,12 +842,17 @@
         },
 
         connectActivityStream() {
+          this.closeActivityStream();
+
           if (!("EventSource" in window)) {
             this.streamStatus = "fallback";
             return;
           }
 
+          const cleanupController = new AbortController();
           const events = new EventSource("/api/stream/activity");
+          this.activityEvents = events;
+          this.activityStreamCleanupController = cleanupController;
           events.addEventListener("ready", () => {
             this.streamStatus = "live";
           });
@@ -443,6 +867,20 @@
           events.onerror = () => {
             this.streamStatus = "fallback";
           };
+          window.addEventListener("pagehide", () => {
+            this.closeActivityStream(events, cleanupController);
+          }, { once: true, signal: cleanupController.signal });
+        },
+
+        closeActivityStream(events = this.activityEvents, cleanupController = this.activityStreamCleanupController) {
+          cleanupController?.abort();
+          events?.close();
+          if (this.activityEvents === events) {
+            this.activityEvents = null;
+          }
+          if (this.activityStreamCleanupController === cleanupController) {
+            this.activityStreamCleanupController = null;
+          }
         },
 
         async submitStellaMessage() {

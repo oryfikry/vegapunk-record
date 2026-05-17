@@ -1,0 +1,212 @@
+- main [ref=e2]:
+  - generic [ref=e3]:
+    - generic [ref=e4]:
+      - paragraph [ref=e6]: Vegapunk-Record / Stella Ops
+      - heading "Static dashboard for local-first agent command." [level=1] [ref=e7]
+      - paragraph [ref=e8]: A no-build Alpine.js and Tailwind CSS control surface for agents, Stella activity, live knowledge signals, and safe runtime settings.
+    - complementary [ref=e9]:
+      - generic [ref=e10]:
+        - generic [ref=e11]:
+          - paragraph [ref=e12]: System Pulse
+          - paragraph [ref=e13]: 6 agents
+        - generic [ref=e14]: SSE live
+      - generic [ref=e15]:
+        - generic [ref=e16]:
+          - term [ref=e17]: Tasks
+          - definition [ref=e18]: "2"
+        - generic [ref=e19]:
+          - term [ref=e20]: Logs
+          - definition [ref=e21]: "8"
+        - generic [ref=e22]:
+          - term [ref=e23]: Mode
+          - definition [ref=e24]: mock
+      - button "Open Settings Modal" [active] [ref=e25] [cursor=pointer]
+  - generic [ref=e26]:
+    - article [ref=e27]:
+      - generic [ref=e28]:
+        - generic [ref=e29]:
+          - paragraph [ref=e30]: Panel 01
+          - heading "Agent Control Panel" [level=2] [ref=e31]
+        - button "Refresh" [ref=e32] [cursor=pointer]
+      - generic [ref=e33]:
+        - generic [ref=e34]:
+          - generic [ref=e35]:
+            - generic [ref=e36]:
+              - paragraph [ref=e37]: Lilith
+              - paragraph [ref=e38]: lilith / satellite
+            - generic [ref=e39]: inactive
+          - paragraph [ref=e40]: Using default Stella routing.
+        - generic [ref=e41]:
+          - generic [ref=e42]:
+            - generic [ref=e43]:
+              - paragraph [ref=e44]: Shaka
+              - paragraph [ref=e45]: shaka / satellite
+            - generic [ref=e46]: inactive
+          - paragraph [ref=e47]: Using default Stella routing.
+        - generic [ref=e48]:
+          - generic [ref=e49]:
+            - generic [ref=e50]:
+              - paragraph [ref=e51]: Smoke Test Agent
+              - paragraph [ref=e52]: smoke-1778220608208 / smoke-test
+            - generic [ref=e53]: active
+          - paragraph [ref=e54]: Using default Stella routing.
+        - generic [ref=e55]:
+          - generic [ref=e56]:
+            - generic [ref=e57]:
+              - paragraph [ref=e58]: Smoke Test Agent
+              - paragraph [ref=e59]: smoke-1778221053287 / smoke-test
+            - generic [ref=e60]: active
+          - paragraph [ref=e61]: Using default Stella routing.
+        - generic [ref=e62]:
+          - generic [ref=e63]:
+            - generic [ref=e64]:
+              - paragraph [ref=e65]: Stella
+              - paragraph [ref=e66]: stella / server
+            - generic [ref=e67]: active
+          - paragraph [ref=e68]: Using default Stella routing.
+        - generic [ref=e69]:
+          - generic [ref=e70]:
+            - generic [ref=e71]:
+              - paragraph [ref=e72]: QA Agent
+              - paragraph [ref=e73]: test-qa / tester
+            - generic [ref=e74]: active
+          - paragraph [ref=e75]: Using default Stella routing.
+      - generic [ref=e76]:
+        - generic [ref=e77]:
+          - heading "Task Queue" [level=3] [ref=e78]
+          - generic [ref=e79]: 2 total
+        - generic [ref=e80]:
+          - generic [ref=e81]:
+            - generic [ref=e82]:
+              - paragraph [ref=e83]: Task 12 smoke task task12-smoke-1778221053287
+              - generic [ref=e84]: completed
+            - paragraph [ref=e85]: "assigned: smoke-1778221053287"
+          - generic [ref=e86]:
+            - generic [ref=e87]:
+              - paragraph [ref=e88]: Task 12 smoke task task12-smoke-1778220608208
+              - generic [ref=e89]: completed
+            - paragraph [ref=e90]: "assigned: smoke-1778220608208"
+    - article [ref=e91]:
+      - generic [ref=e92]:
+        - generic [ref=e93]:
+          - paragraph [ref=e94]: Panel 02
+          - heading "Stella Interface" [level=2] [ref=e95]
+        - generic [ref=e96]: POST /api/activity
+      - generic [ref=e97]:
+        - generic [ref=e98]:
+          - text: Agent source
+          - combobox "Agent source" [ref=e99]:
+            - option "Lilith (lilith)" [selected]
+            - option "Shaka (shaka)"
+            - option "Smoke Test Agent (smoke-1778220608208)"
+            - option "Smoke Test Agent (smoke-1778221053287)"
+            - option "Stella (stella)"
+            - option "QA Agent (test-qa)"
+        - generic [ref=e100]:
+          - text: Message
+          - textbox "Message" [ref=e101]:
+            - /placeholder: Ask Stella to record a local observation...
+        - generic [ref=e102]:
+          - paragraph [ref=e103]: Ready to write a redacted activity log.
+          - button "Transmit" [disabled] [ref=e104]
+      - generic [ref=e105]:
+        - generic [ref=e106]:
+          - paragraph [ref=e107]: Service
+          - paragraph [ref=e108]: stella
+        - generic [ref=e109]:
+          - paragraph [ref=e110]: Provider
+          - paragraph [ref=e111]: mock
+  - generic [ref=e112]:
+    - generic [ref=e113]:
+      - generic [ref=e114]:
+        - paragraph [ref=e115]: Panel 03
+        - heading "Knowledge Stream" [level=2] [ref=e116]
+      - generic [ref=e117]:
+        - generic [ref=e118]: /api/activity · 8
+        - generic [ref=e119]: SSE live
+    - generic [ref=e120]:
+      - article [ref=e121]:
+        - generic [ref=e122]:
+          - generic [ref=e123]:
+            - generic [ref=e124]: info
+            - generic [ref=e125]: message
+          - time [ref=e126]: 5/8/2026, 1:17:33 PM
+        - paragraph [ref=e127]: MCP sync smoke task12-smoke-1778221053287
+        - paragraph [ref=e128]: smoke-1778221053287 · smoke-1778221053287
+      - article [ref=e129]:
+        - generic [ref=e130]:
+          - generic [ref=e131]:
+            - generic [ref=e132]: info
+            - generic [ref=e133]: message
+          - time [ref=e134]: 5/8/2026, 1:17:33 PM
+        - paragraph [ref=e135]: Smoke test activity task12-smoke-1778221053287
+        - paragraph [ref=e136]: smoke-1778221053287 · smoke
+      - article [ref=e137]:
+        - generic [ref=e138]:
+          - generic [ref=e139]:
+            - generic [ref=e140]: info
+            - generic [ref=e141]: system
+          - time [ref=e142]: 5/8/2026, 1:17:33 PM
+        - paragraph [ref=e143]: "Agent registered: smoke-1778221053287"
+        - paragraph [ref=e144]: stella · stella
+      - article [ref=e145]:
+        - generic [ref=e146]:
+          - generic [ref=e147]:
+            - generic [ref=e148]: info
+            - generic [ref=e149]: message
+          - time [ref=e150]: 5/8/2026, 1:10:08 PM
+        - paragraph [ref=e151]: MCP sync smoke task12-smoke-1778220608208
+        - paragraph [ref=e152]: smoke-1778220608208 · smoke-1778220608208
+      - article [ref=e153]:
+        - generic [ref=e154]:
+          - generic [ref=e155]:
+            - generic [ref=e156]: info
+            - generic [ref=e157]: message
+          - time [ref=e158]: 5/8/2026, 1:10:08 PM
+        - paragraph [ref=e159]: Smoke test activity task12-smoke-1778220608208
+        - paragraph [ref=e160]: smoke-1778220608208 · smoke
+      - article [ref=e161]:
+        - generic [ref=e162]:
+          - generic [ref=e163]:
+            - generic [ref=e164]: info
+            - generic [ref=e165]: system
+          - time [ref=e166]: 5/8/2026, 1:10:08 PM
+        - paragraph [ref=e167]: "Agent registered: smoke-1778220608208"
+        - paragraph [ref=e168]: stella · stella
+      - article [ref=e169]:
+        - generic [ref=e170]:
+          - generic [ref=e171]:
+            - generic [ref=e172]: info
+            - generic [ref=e173]: thought
+          - time [ref=e174]: 5/8/2026, 11:10:44 AM
+        - paragraph [ref=e175]: QA verification
+        - paragraph [ref=e176]: test-qa · test-qa
+      - article [ref=e177]:
+        - generic [ref=e178]:
+          - generic [ref=e179]:
+            - generic [ref=e180]: info
+            - generic [ref=e181]: system
+          - time [ref=e182]: 5/8/2026, 11:10:44 AM
+        - paragraph [ref=e183]: "Agent registered: test-qa"
+        - paragraph [ref=e184]: stella · stella
+  - generic [ref=e186]:
+    - generic [ref=e187]:
+      - paragraph [ref=e188]: Panel 04
+      - heading "Settings Modal" [level=2] [ref=e189]
+      - paragraph [ref=e190]: "Safe runtime values load from `/api/config`. Secret-like keys are filtered before display and never rendered in the modal."
+    - button "Review Config" [ref=e191] [cursor=pointer]
+  - dialog "Settings Modal" [ref=e192]:
+    - generic [ref=e193]:
+      - generic [ref=e194]:
+        - generic [ref=e195]:
+          - paragraph [ref=e196]: Safe Configuration
+          - heading "Settings Modal" [level=2] [ref=e197]
+        - button "Close" [ref=e198] [cursor=pointer]
+      - generic [ref=e199]:
+        - generic [ref=e200]:
+          - generic [ref=e201]: service
+          - generic [ref=e202]: stella
+        - generic [ref=e203]:
+          - generic [ref=e204]: llmProvider
+          - generic [ref=e205]: mock
+      - paragraph [ref=e206]: Filtered keys include secret, token, password, cookie, authorization, and API key patterns.

@@ -1,0 +1,124 @@
+- main [ref=e2]:
+  - generic [ref=e5]:
+    - generic [ref=e6]:
+      - generic [ref=e9]:
+        - paragraph [ref=e10]: Stella Onboarding
+        - paragraph [ref=e11]: Local-first command access with Punk Records color.
+      - generic [ref=e12]:
+        - generic [ref=e13]: 01 Passcode
+        - generic [ref=e14]: 02 Provider
+        - generic [ref=e15]: 03 Dashboard
+    - generic [ref=e17]:
+      - paragraph [ref=e19]: Checking Session
+      - heading "Tuning Stella's signal." [level=1] [ref=e20]
+      - paragraph [ref=e21]: "Reading `/api/auth/status` before opening the command dashboard."
+    - generic [ref=e22]:
+      - paragraph [ref=e23]: Secure Gate
+      - heading "Enter the command passcode." [level=1] [ref=e24]
+      - paragraph [ref=e25]: This is session-only access. The passcode stays in Alpine state long enough to verify and is never stored in localStorage.
+      - generic [ref=e26]:
+        - generic [ref=e27]:
+          - text: Passcode
+          - textbox "Passcode" [ref=e28]:
+            - /placeholder: ••••••
+        - paragraph [ref=e29]
+        - button "Verify Passcode Verifying" [ref=e30] [cursor=pointer]
+    - generic [ref=e32]:
+      - generic [ref=e33]:
+        - paragraph [ref=e34]: LLM Provider
+        - heading "Choose Stella's voice." [level=1] [ref=e35]
+        - paragraph [ref=e36]: "Provider options are fetched from `/api/setup/providers`, then configured once before the dashboard opens."
+        - button "Refresh Providers Loading Providers" [ref=e37] [cursor=pointer]
+      - generic [ref=e38]:
+        - generic [ref=e39]: "No providers were returned by `/api/setup/providers`."
+        - generic [ref=e40]:
+          - generic [ref=e42]:
+            - paragraph [ref=e43]: Selected provider
+            - paragraph
+          - textbox [ref=e46]:
+            - /placeholder: Paste provider key
+          - textbox [ref=e48]
+          - generic [ref=e49]:
+            - text: Model (optional)
+            - textbox "Model (optional)" [ref=e50]:
+              - /placeholder: Leave blank for provider default
+          - paragraph [ref=e51]
+          - button "Save Provider + Open Dashboard Saving Provider" [ref=e52] [cursor=pointer]
+        - paragraph [ref=e53]
+  - generic [ref=e54]:
+    - generic [ref=e55]:
+      - generic [ref=e56]:
+        - paragraph [ref=e58]: Vegapunk-Record / Stella Ops
+        - heading "Static dashboard for local-first agent command." [level=1] [ref=e59]
+        - paragraph [ref=e60]: A no-build Alpine.js and Tailwind CSS control surface for agents, Stella activity, live knowledge signals, and safe runtime settings.
+      - complementary [ref=e61]:
+        - generic [ref=e63]:
+          - paragraph [ref=e64]: System Pulse
+          - paragraph
+        - generic [ref=e66]:
+          - generic [ref=e67]:
+            - term [ref=e68]: Tasks
+            - definition
+          - generic [ref=e69]:
+            - term [ref=e70]: Logs
+            - definition
+          - generic [ref=e71]:
+            - term [ref=e72]: Mode
+            - definition
+        - button "Open Settings Modal" [ref=e73] [cursor=pointer]
+    - generic [ref=e74]:
+      - article [ref=e75]:
+        - generic [ref=e76]:
+          - generic [ref=e77]:
+            - paragraph [ref=e78]: Panel 01
+            - heading "Agent Control Panel" [level=2] [ref=e79]
+          - button "Refresh" [ref=e80] [cursor=pointer]
+        - generic [ref=e81]: "No agents are registered yet. The control panel will populate automatically when `/api/agents` returns Stella satellites."
+        - generic [ref=e83]:
+          - heading "Task Queue" [level=3] [ref=e85]
+          - paragraph [ref=e87]: No tasks are queued. Stella is idle and ready for the next local command.
+      - article [ref=e88]:
+        - generic [ref=e89]:
+          - generic [ref=e90]:
+            - paragraph [ref=e91]: Panel 02
+            - heading "Stella Interface" [level=2] [ref=e92]
+          - generic [ref=e93]: POST /api/activity
+        - generic [ref=e94]:
+          - generic [ref=e95]:
+            - text: Agent source
+            - combobox "Agent source" [ref=e96]
+          - generic [ref=e97]:
+            - text: Message
+            - textbox "Message" [ref=e98]:
+              - /placeholder: Ask Stella to record a local observation...
+          - generic [ref=e99]:
+            - paragraph
+            - button "Transmit Sending" [ref=e100] [cursor=pointer]
+        - generic [ref=e101]: Stella Interface is waiting for an agent source before posting activity.
+        - generic [ref=e102]:
+          - generic [ref=e103]:
+            - paragraph [ref=e104]: Service
+            - paragraph
+          - generic [ref=e105]:
+            - paragraph [ref=e106]: Provider
+            - paragraph
+    - generic [ref=e107]:
+      - generic [ref=e109]:
+        - paragraph [ref=e110]: Panel 03
+        - heading "Knowledge Stream" [level=2] [ref=e111]
+      - generic [ref=e115]: "No activity logs yet. The Knowledge Stream is connected to `/api/activity` and will listen to `/api/stream/activity` when the browser supports EventSource."
+    - generic [ref=e118]:
+      - generic [ref=e119]:
+        - paragraph [ref=e120]: Panel 04
+        - heading "Settings Modal" [level=2] [ref=e121]
+        - paragraph [ref=e122]: "Safe runtime values load from `/api/config`. Secret-like keys are filtered before display and never rendered in the modal."
+      - button "Review Config" [ref=e123] [cursor=pointer]
+    - dialog "Settings Modal" [ref=e124]:
+      - generic [ref=e125]:
+        - generic [ref=e126]:
+          - generic [ref=e127]:
+            - paragraph [ref=e128]: Safe Configuration
+            - heading "Settings Modal" [level=2] [ref=e129]
+          - button "Close" [ref=e130] [cursor=pointer]
+        - generic [ref=e131]: No safe config values are available yet.
+        - paragraph [ref=e133]: Filtered keys include secret, token, password, cookie, authorization, and API key patterns.

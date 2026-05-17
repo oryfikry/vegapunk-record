@@ -30,24 +30,52 @@ export class ActivityStream {
 }
 
 export function createActivityStreamRoutes(stream: ActivityStream) {
-  return new Elysia({ prefix: "/api/stream" }).get("/activity", () => {
+  return new Elysia({ prefix: "/api/stream" }).get("/activity", ({ request }) => {
     let unsubscribe: (() => void) | undefined;
+    let heartbeat: ReturnType<typeof setInterval> | undefined;
+    let cleanedUp = false;
+
+    const cleanup = () => {
+      if (cleanedUp) {
+        return;
+      }
+
+      cleanedUp = true;
+
+      if (heartbeat) {
+        clearInterval(heartbeat);
+        heartbeat = undefined;
+      }
+
+      unsubscribe?.();
+      unsubscribe = undefined;
+    };
 
     const body = new ReadableStream<Uint8Array>({
       start(controller) {
         controller.enqueue(encoder.encode(`event: ready\ndata: ${JSON.stringify({ ok: true })}\n\n`));
         unsubscribe = stream.subscribe(controller);
+        heartbeat = setInterval(() => {
+          try {
+            controller.enqueue(encoder.encode(": keep-alive\n\n"));
+          } catch {
+            cleanup();
+          }
+        }, 25_000);
+        request.signal.addEventListener("abort", cleanup, { once: true });
       },
       cancel() {
-        unsubscribe?.();
+        cleanup();
       },
     });
 
     return new Response(body, {
       headers: {
-        "cache-control": "no-cache",
+        // SSE must stay unbuffered; no-transform prevents proxies from compressing or coalescing chunks.
+        "cache-control": "no-cache, no-transform",
         connection: "keep-alive",
         "content-type": "text/event-stream; charset=utf-8",
+        "x-accel-buffering": "no",
       },
     });
   });

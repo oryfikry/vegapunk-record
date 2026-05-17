@@ -96,3 +96,6 @@ Task 5 security review follow-up: narrowed public /api/config to service + llmPr
 
 ## 2026-05-08T13:23:44.3246909+07:00 - Generic custom LLM provider rename
 - Renamed the optional OpenAI-compatible provider from provider-specific naming to generic custom LLM naming across `.env.example`, `README.md`, `src/llm/types.ts`, `src/llm/router.ts`, `src/llm/providers/index.ts`, `src/llm/providers/custom.ts`, and `test/llm/router.test.ts`; `LLM_PROVIDER=custom` is now the opt-in provider and blank `CUSTOM_LLM_BASE_URL`/`CUSTOM_LLM_API_KEY` still fail before any network call with a non-retryable provider error.
+
+## 2026-05-08T13:29:58.0000000+07:00 - Dashboard SSE lifecycle cleanup
+- Browser EventSource reload/navigation can surface `ERR_INCOMPLETE_CHUNKED_ENCODING` when the client and server both treat the SSE stream as anonymous/idle; keep `/api/stream/activity` long-lived with no-transform/no-buffering headers, abort/cancel cleanup, periodic SSE comments, and close the dashboard EventSource on `pagehide`.

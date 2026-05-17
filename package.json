@@ -15,7 +15,8 @@
         "smoke": "bun run scripts/smoke.ts",
         "smoke:degraded": "bun run scripts/smoke-degraded.ts",
         "satellite:lilith": "bun run scripts/satellites/lilith.ts --once",
-        "satellite:shaka": "bun run scripts/satellites/shaka.ts --once"
+        "satellite:shaka": "bun run scripts/satellites/shaka.ts --once",
+        "vegapunk:satellite": "bun run scripts/satellites/vegapunk.ts"
     },
     "devDependencies": {
         "@types/bun": "latest",

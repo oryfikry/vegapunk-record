@@ -2,7 +2,7 @@ import { afterEach } from "bun:test";
 import { mkdtempSync, rmSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
-import { defaultConfig } from "../../src/config";
+import { defaultConfig, type StellaConfig } from "../../src/config";
 import { createDatabase, type VegapunkDatabase } from "../../src/db";
 import { createApp } from "../../src/server/app";
 
@@ -17,8 +17,8 @@ export function createTemporaryDatabase(): VegapunkDatabase {
   return db;
 }
 
-export function createTestApp(db = createTemporaryDatabase()) {
-  return createApp({ db, config: defaultConfig });
+export function createTestApp(db = createTemporaryDatabase(), config: StellaConfig = defaultConfig) {
+  return createApp({ db, config });
 }
 
 export function jsonRequest(path: string, method: string, body?: unknown): Request {
